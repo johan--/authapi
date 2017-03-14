@@ -1,0 +1,6 @@
+/typings
+/node_modules
+/dist
+/coverage
+npm-debug.log
+newrelic_agent.log

@@ -1,0 +1,47 @@
+<html>
+   <head>
+      <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width">
+   </head>
+   <body style="background-color: #fafafa;font-family: Open Sans, Helvetica, Arial;-webkit-font-smoothing: antialiased;">
+      <table width="100%" align="center" style="padding-top:30px; padding-left:20px; padding-right:20px; padding-bottom:100px">
+         <tbody>
+            <tr>
+               <td align="center">
+                  <table width="100%" bgcolor="#ffffff" style="width:600px;height:450px; -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);">
+                     <tbody>
+                        <tr style="height:100px">
+                           <td align="center">
+                              <img style="width:250px;"src="<%= appBaseURL %>assets/img/t-f-new@2x.png">
+                           </td>
+                        </tr>
+                        <tr>
+                           <td style="padding:30px 40px 70px 40px;">
+                              <h2 style="height: 30px;font-family: DroidSerif;font-size: 22px;font-weight: normal;font-style: normal;font-stretch: normal;color:#4bc09a;">Your T&amp;F Account Verification</h2>
+                              <p style=" width: 497px;font-family: OpenSans;font-size: 15px;font-weight: normal;font-style: normal;font-stretch: normal;color: #000000;">
+                                 Dear <%= firstName %> <%= lastName %>,
+                                 <br><br>
+                                 Welcome to T&amp;F! Your registration was successful.
+                                 <br>
+                                 Here is your verification code:
+                                 <br>
+                              </p>
+                              <p style="font-family: OpenSans;font-size: 20px;margin: 20px 0px;font-weight: bold;font-style: normal;font-stretch: normal;color: #000000;">
+                                 <b> <%= verificationToken %></b>
+                              </p>
+                              <p style="font-family: OpenSans;font-size: 15px;margin: 20px 0px;font-weight: normal;font-style: normal;font-stretch: normal;color: #000000;">
+                                 Please paste this code <a style="color: #00aacc;" target="_blank" href="<%= appBaseURL %>">here</a> to verify your registration.If you have any questions,
+                                 send us a note at <a style="color:#139ac0;;" href="mailto:help@tandf.co.uk">help@tandf.co.uk</a>.We'd love to help!
+                              <p style="font-family: OpenSans;font-size: 15px;margin: 20px 0px;font-weight: normal;font-style: normal;font-stretch: normal;color: #000000;">
+                                 Cheers,
+                                 <br>T&amp;F Team
+                              </P>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+   </body>
+</html>

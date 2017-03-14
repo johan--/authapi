@@ -1,0 +1,222 @@
+definitions:
+  updateClientCreate:
+    properties:
+      name:
+        required: true
+        type: string
+        example: auth-User
+      redirect_uris:
+        required: true
+        type: string
+        example: http://localhost:3000/login/callback
+  clientCreate:
+    properties:
+      appName:
+        required: true
+        type: string
+        example: auth-User
+      redirect_uris:
+        required: true
+        type: string
+        example: http://localhost:3000/login/callback
+  postForgotPassword:
+    properties:
+      username:
+        required: true
+        type: string
+        example: test6@test.com
+      resetPasswordToken:
+        required: true
+        type: string
+        example: token
+  putForgotPassword:
+    properties:
+      username:
+        required: true
+        type: string
+        example: test6@test.com
+      newPassword:
+        required: true
+        type: string
+        example: password
+      resetPasswordToken:
+        required: true
+        type: string
+        example: token
+  create:
+    properties:
+      metadata:
+        properties:
+          success:
+            required: true
+            type: string
+            example: success
+  createToken:
+    properties:
+      grant_type:
+        required: true
+        type: string
+        example: client_credentials
+      client_id:
+        required: true
+        type: string
+        example: 5ae8e1bde87a5b8d1dc2eaeb99bb3c62a4f5deb41438bf15b71c93b79e8773f1
+      client_secret:
+        required: true
+        type: string
+        example: b8e6239f13175526bddbdfb574bf943934b2132453d1d91bc7f86d50eb69c8c5 
+      code:
+        required: true
+        type: string
+        example: 3e698b95efcc669f42ecd3c4a2b9a7fc
+      redirect_uri:
+        required: true
+        type: string
+        example: http://localhost:3000/librarian/login/callback 
+      scope:
+        required: true
+        type: string
+        example: mail openid profile foo
+  searchCreate:
+    properties:
+      username:
+        required: true
+        type: string
+        example: test15@test.com
+  userUpdateCreate:
+    properties:
+      firstName:
+        required: true
+        type: string
+        example: GG name
+  credentialsCreate:
+    properties:
+      username:
+        required: true
+        type: string
+        example: test6@test.com
+      oldPassword:
+        required: true
+        type: string
+        example: Tricon123#
+      newPassword:
+        required: true
+        type: string
+        example: Trico123#
+  postLogout:
+    properties:
+      idtoken:
+        required: true
+        type: string
+        example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9ybTRE
+  loginCreate:
+    properties:
+      username:
+        required: true
+        type: string
+        example: test6@test.com
+      password:
+        required: true
+        type: string
+        example: Tricon123#
+  verifySignupCreate:
+    properties:
+      username:
+        required: true
+        type: string
+        example: testUser2@test.com
+      registrationVerificationToken:
+        required: true
+        type: string
+        example: uaj3k5z3
+  signupCreate:
+    properties:
+      userType:
+        required: true
+        type: string
+        example: shopper
+      username:
+        required: true
+        type: string
+        example: test8@test.com
+      password:
+        required: true
+        type: string
+        example: Tricon123#
+      email:
+        required: true
+        type: string
+        example: pyramid.taylorandfrancis@gmail.com
+      firstName:
+        required: true
+        type: string
+        example: GG fname
+      lastName:
+        required: true
+        type: string
+        example: GG lname
+      dob:
+        required: true
+        type: string
+        example: 01-01-1982
+      jobTitle:
+        required: true
+        type: string
+        example: Student
+      organization:
+        required: true
+        type: string
+        example: some c insitute
+      gender:
+        required: true
+        type: string
+        example: male
+      mobilePhone:
+        required: true
+        type: string
+        example: '23232323'
+      fax:
+        required: true
+        type: string
+        example: 2323-2323
+      address:
+        properties:
+          addressLine1:
+            required: true
+            type: string
+            example: ABC Hotel
+          addressLine2:
+            required: true
+            type: string
+            example: Koramangala
+          city:
+            required: true
+            type: string
+            example: Bangalore
+          state:
+            required: true
+            type: string
+            example: Karntaka
+          country:
+            required: true
+            type: string
+            example: India
+          zipCode:
+            required: true
+            type: integer
+            format: int64
+            example: 560034
+      accessToken:
+        required: true
+        type: string
+        example: "[]"
+  400error:
+    properties:
+      message:
+        type: string
+        example: 400 Bad Request
+  create400Error:
+    properties:
+      Authentication failure:
+        type: string
+        example: Invalid credentials

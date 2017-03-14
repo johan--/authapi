@@ -1,0 +1,713 @@
+<!DOCTYPE HTML><html><head><title>AuthUser API API documentation</title><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="generator" content="https://github.com/kevinrenskers/raml2html 2.4.0"><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/default.min.css"><script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script><script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script><script type="text/javascript">
+      $(document).ready(function() {
+        $('.page-header pre code, .top-resource-description pre code').each(function(i, block) {
+          hljs.highlightBlock(block);
+        });
+
+        $('[data-toggle]').click(function() {
+          var selector = $(this).data('target') + ' pre code';
+          $(selector).each(function(i, block) {
+            hljs.highlightBlock(block);
+          });
+        });
+
+        // open modal on hashes like #_action_get
+        $(window).bind('hashchange', function(e) {
+          var anchor_id = document.location.hash.substr(1); //strip #
+          var element = $('#' + anchor_id);
+
+          // do we have such element + is it a modal?  --> show it
+          if (element.length && element.hasClass('modal')) {
+            element.modal('show');
+          }
+        });
+
+        // execute hashchange on first page load
+        $(window).trigger('hashchange');
+
+        // remove url fragment on modal hide
+        $('.modal').on('hidden.bs.modal', function() {
+          try {
+            if (history && history.replaceState) {
+                history.replaceState({}, '', '#');
+            }
+          } catch(e) {}
+        });
+      });
+    </script><style>
+      .hljs {
+        background: transparent;
+      }
+      .parent {
+        color: #999;
+      }
+      .list-group-item > .badge {
+        float: none;
+        margin-right: 6px;
+      }
+      .panel-title > .methods {
+        float: right;
+      }
+      .badge {
+        border-radius: 0;
+        text-transform: uppercase;
+        width: 70px;
+        font-weight: normal;
+        color: #f3f3f6;
+        line-height: normal;
+      }
+      .badge_get {
+        background-color: #63a8e2;
+      }
+      .badge_post {
+        background-color: #6cbd7d;
+      }
+      .badge_put {
+        background-color: #22bac4;
+      }
+      .badge_delete {
+        background-color: #d26460;
+      }
+      .badge_patch {
+        background-color: #ccc444;
+      }
+      .list-group, .panel-group {
+        margin-bottom: 0;
+      }
+      .panel-group .panel+.panel-white {
+        margin-top: 0;
+      }
+      .panel-group .panel-white {
+        border-bottom: 1px solid #F5F5F5;
+        border-radius: 0;
+      }
+      .panel-white:last-child {
+        border-bottom-color: white;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+      }
+      .panel-white .panel-heading {
+        background: white;
+      }
+      .tab-pane ul {
+        padding-left: 2em;
+      }
+      .tab-pane h2 {
+        font-size: 1.2em;
+        padding-bottom: 4px;
+        border-bottom: 1px solid #ddd;
+      }
+      .tab-pane h3 {
+        font-size: 1.1em;
+      }
+      .tab-content {
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+      }
+      #sidebar {
+        margin-top: 30px;
+        padding-right: 5px;
+        overflow: auto;
+        height: 90%;
+      }
+      .top-resource-description {
+        border-bottom: 1px solid #ddd;
+        background: #fcfcfc;
+        padding: 15px 15px 0 15px;
+        margin: -15px -15px 10px -15px;
+      }
+      .resource-description {
+        border-bottom: 1px solid #fcfcfc;
+        background: #fcfcfc;
+        padding: 15px 15px 0 15px;
+        margin: -15px -15px 10px -15px;
+      }
+      .resource-description p:last-child {
+        margin: 0;
+      }
+      .list-group .badge {
+        float: left;
+      }
+      .method_description {
+        margin-left: 85px;
+      }
+      .method_description p:last-child {
+        margin: 0;
+      }
+      .list-group-item {
+        cursor: pointer;
+      }
+      .list-group-item:hover {
+        background-color: #f5f5f5;
+      }
+    </style></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>AuthUser API API documentation <small>version Beta</small></h1><p>https://mocksvc.mulesoft.com/mocks/2b13f76a-4794-4729-bf46-0d52d3400b53/mocks/1cd02915-0218-4cb3-8658-271b8237950e/user/</p></div><div class="panel panel-default"><div class="panel-heading"><h3 id="user" class="panel-title">/user</h3></div><div class="panel-body"><div class="top-resource-description"><p>A user management API - A point of user management for all of T&amp;F.<br><br>Please check out our source code here: <a href="http://bitbucket.crcpress.local:7990/projects/CP/repos/authuser-api/browse">http://bitbucket.crcpress.local:7990/projects/CP/repos/authuser-api/browse</a></p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_user_auth_signup"><span class="parent">/user/auth</span>/signup</a> <span class="methods"><a href="#user_auth_signup_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_user_auth_signup" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>Register a user with basic information First and Last name, username (email) and password.</p></div><div class="list-group"><div onclick="window.location.href = '#user_auth_signup_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Register a user with basic information First and Last name, username (email) and password.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="user_auth_signup_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent">/user/auth</span>/signup</h4></div><div class="modal-body"><div class="alert alert-info"><p>Register a user with basic information First and Last name, username (email) and password.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#user_auth_signup_post_request" data-toggle="tab">Request</a></li><li><a href="#user_auth_signup_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="user_auth_signup_post_request"><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "userType": "creator",
+  "username": "joao@test.com",
+  "password": "Admin123@#$@",
+  "email": "joao@test.com",
+  "firstName": "Joao",
+  "lastName": "Lastname",
+  "dob": "01-01-1981",
+  "jobTitle" : "Academic Professional",
+  "organization" : "An Institution",
+  "gender": "M",
+  "mobilePhone" : "9541234567",
+  "fax":"9547654321",
+  "address": {
+      "addressLine1": "ABC Hotel",
+      "addressLine2": "Suite 300",
+      "city": "Miami",
+      "state": "FL",
+      "country": "USA",
+      "zipCode": 33333
+  }
+}
+</code></pre><p><strong>Type: application/x-www-form-urlencoded</strong></p><strong>Form Parameters</strong><ul><li><strong>username</strong>: <em>required (string - pattern: ^\w+@[a-zA-Z_]+?.[a-zA-Z]{2,3}$)</em><p>Unique email address to serve as a username</p><p><strong>Example</strong>:</p><pre>admin@admin.com</pre></li><li><strong>password</strong>: <em>required (string - minLength: 8 - pattern: ^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[$"?@$!%*#_ +=|~?&()/.,<>`,[\]^"';\\:{}\-]).{8,}$)</em><p>Password must be at least 8 characters long and include at least one of each of 0-9, a-z, A-Z and Symbol (e.g. !</p><p><strong>Example</strong>:</p><pre>Admin123$$$</pre></li><li><strong>firstname</strong>: <em>required (string)</em><p>User&#39;s first name</p><p><strong>Example</strong>:</p><pre>John</pre></li><li><strong>lastname</strong>: <em>required (string)</em><p>User&#39;s last name</p><p><strong>Example</strong>:</p><pre>Albuquerque</pre></li><li><strong>middlename</strong>: <em>(string)</em><p>User&#39;s middle name</p><p><strong>Example</strong>:</p><pre>Claudio</pre></li><li><strong>country</strong>: <em>required (string)</em><p>User&#39;s region/country</p><p><strong>Example</strong>:</p><pre>USA</pre></li><li><strong>Any Field Key And Value Here</strong>: <em>(string)</em><p>This key will overwrite/update existing value or create a new field.</p><p><strong>Example</strong>:</p><pre>Name this parameter &#39;firstName&#39; and value of &#39;NotJohn&#39;</pre></li></ul></div><div class="tab-pane" id="user_auth_signup_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "success"
+  },
+  "data": {
+    "__v": 0,
+    "username": "joao@test.com",
+    "firstName": "Joao",
+    "lastName": "Lastname",
+    "organization": "An Institution",
+    "jobTitle": "Academic Professional",
+    "dob": "01-01-1981",
+    "mobilePhone": "9541234567",
+    "fax": "9547654321",
+    "email": "joao@test.com",
+    "address": {
+      "zipCode": 33333,
+      "country": "USA",
+      "state": "FL",
+      "city": "Miami",
+      "addressLine2": "Suite 300",
+      "addressLine1": "ABC Hotel"
+    },
+    "credential": {
+      "password": "$2a$10$95TXm76Wtf1jj5cf2xwXnOR6v0ecmm20iPm9VPPczfN0DOAxlplgq",
+      "username": "joao@test.com"
+    },
+    "createdOn": 1474553096178,
+    "displayName": "Joao Lastname",
+    "registrationVerificationToken": "6fbya80j",
+    "registrationVerificationTokenExpiry": 1474554896178,
+    "isValidated": false,
+    "_id": "57e3e508aa3028465ca1c0bc",
+    "consents": [],
+    "clients": [],
+    "accessToken": [
+      {
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTMwOTYxNzgsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny43OSUyMiU3RCJ9.o1MfeSPyM34I0KMpfBRRH0ws6lviQkZyRi0EwY5T5O4",
+        "expiry": 1474554896178,
+        "username": "joao@test.com",
+        "clientId": "%7B%22agent%22:%22Mozilla/5.0%20(Windows%20NT%2010.0;%20WOW64)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/53.0.2785.116%20Safari/537.36%22,%22ip%22:%22199.26.78.10,%2010.135.97.79%22%7D"
+      }
+    ],
+    "userType": "creator"
+  }
+}
+</code></pre></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_user_auth_login"><span class="parent">/user/auth</span>/login</a> <span class="methods"><a href="#user_auth_login_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_user_auth_login" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>Authenticate a username and password (login attempt)</p></div><div class="list-group"><div onclick="window.location.href = '#user_auth_login_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Authenticate a username and password (login attempt)</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="user_auth_login_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent">/user/auth</span>/login</h4></div><div class="modal-body"><div class="alert alert-info"><p>Authenticate a username and password (login attempt)</p></div><ul class="nav nav-tabs"><li class="active"><a href="#user_auth_login_post_request" data-toggle="tab">Request</a></li><li><a href="#user_auth_login_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="user_auth_login_post_request"><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+    "username": "test@test.com",
+    "password": "admin123"
+}
+</code></pre><p><strong>Type: application/x-www-form-urlencoded</strong></p><strong>Form Parameters</strong><ul><li><strong>username</strong>: <em>required (string - pattern: ^\w+@[a-zA-Z_]+?.[a-zA-Z]{2,3}$)</em><p>Unique email address to serve as a username</p><p><strong>Example</strong>:</p><pre>admin@admin.com</pre></li><li><strong>password</strong>: <em>required (string - minLength: 8)</em><p>User&#39;s password must be at least 8 characters.</p><p><strong>Example</strong>:</p><pre>admin123</pre></li></ul></div><div class="tab-pane" id="user_auth_login_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "success",
+    "message": null
+  },
+  "data": {
+    "_id": "57e3e508aa3028465ca1c0bc",
+    "username": "joao@test.com",
+    "firstName": "Joao",
+    "lastName": "Lastname",
+    "organization": "An Institution",
+    "jobTitle": "Academic Professional",
+    "dob": "01-01-1981",
+    "mobilePhone": "9541234567",
+    "fax": "9547654321",
+    "email": "joao@test.com",
+    "address": {
+      "addressLine1": "ABC Hotel",
+      "addressLine2": "Suite 300",
+      "city": "Miami",
+      "state": "FL",
+      "country": "USA",
+      "zipCode": 33333
+    },
+    "credential": {
+      "username": "joao@test.com",
+      "password": "$2a$10$95TXm76Wtf1jj5cf2xwXnOR6v0ecmm20iPm9VPPczfN0DOAxlplgq"
+    },
+    "createdOn": 1474553096178,
+    "displayName": "Joao Lastname",
+    "registrationVerificationToken": "6fbya80j",
+    "registrationVerificationTokenExpiry": 1474554896178,
+    "isValidated": false,
+    "__v": 0,
+    "consents": [],
+    "clients": [],
+    "accessToken": [
+      {
+        "scope": "",
+        "clientId": "%7B%22agent%22:%22Mozilla/5.0%20(Windows%20NT%2010.0;%20WOW64)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/53.0.2785.116%20Safari/537.36%22,%22ip%22:%22199.26.78.10,%2010.135.97.151%22%7D",
+        "username": "joao@test.com",
+        "expiry": 1474555078804,
+        "idToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTMyNzg4MDQsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNTElMjIlN0QifQ.IhBvTILtveFsWDr_ehhjtIpzASZfbqVa4Tu8MJu-PVw",
+        "type": "user-access-token",
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTMyNzg4MDQsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNTElMjIlN0QifQ.IhBvTILtveFsWDr_ehhjtIpzASZfbqVa4Tu8MJu-PVw"
+      }
+    ],
+    "userType": "creator"
+  }
+}
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/404" target="_blank">404</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "failure",
+    "message": {
+      "key": "EMAIL_ADDRESS",
+      "value": "Invalid email address."
+    }
+  },
+  "data": null
+}
+</code></pre></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_user_auth_logout"><span class="parent">/user/auth</span>/logout</a> <span class="methods"><a href="#user_auth_logout_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_user_auth_logout" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>Log a user out</p></div><div class="list-group"><div onclick="window.location.href = '#user_auth_logout_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Log out a user with their auth token</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="user_auth_logout_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent">/user/auth</span>/logout</h4></div><div class="modal-body"><div class="alert alert-info"><p>Log out a user with their auth token</p></div><ul class="nav nav-tabs"><li class="active"><a href="#user_auth_logout_post_request" data-toggle="tab">Request</a></li><li><a href="#user_auth_logout_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="user_auth_logout_post_request"><h3>Headers</h3><ul><li><strong>authToken</strong>: <em>required (string)</em><p>User&#39;s Auth token</p><p><strong>Example</strong>:</p><pre>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3RAdGVzdC5jb20iLCJjbGllbnQiOiIlN0IlMjJhZ2VudCUyMjolMjJNb3ppbGxhLzUuMCUyMChXaW5kb3dzJTIwTlQlMjAxMC4wOyUyMFdPVzY0KSUyMEFwcGxlV2ViS2l0LzUzNy4zNiUyMChLSFRNTCwlMjBsaWtlJTIwR2Vja28pJTIwQ2hyb21lLzUxLjAuMjcwNC4xMDMlMjBTYWZhcmkvNTM3LjM2JTIyLCUyMmlwJTIyOiUyMjo6MSUyMiU3RCJ9.hTshaga0-zV4DziiN0hEjHszIYkaRN6PHenzyl0POpo</pre></li></ul></div><div class="tab-pane" id="user_auth_logout_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "success",
+    "message": "User access token removed!"
+  },
+  "data": {
+    "_id": "57e3e508aa3028465ca1c0bc",
+    "username": "joao@test.com",
+    "firstName": "Joao",
+    "lastName": "Lastname",
+    "organization": "An Institution",
+    "jobTitle": "Academic Professional",
+    "dob": "01-01-1981",
+    "mobilePhone": "9541234567",
+    "fax": "9547654321",
+    "email": "joao@test.com",
+    "address": {
+      "addressLine1": "ABC Hotel",
+      "addressLine2": "Suite 300",
+      "city": "Miami",
+      "state": "FL",
+      "country": "USA",
+      "zipCode": 33333
+    },
+    "credential": {
+      "username": "joao@test.com",
+      "password": "$2a$10$95TXm76Wtf1jj5cf2xwXnOR6v0ecmm20iPm9VPPczfN0DOAxlplgq"
+    },
+    "createdOn": 1474553096178,
+    "displayName": "Joao Lastname",
+    "registrationVerificationToken": "6fbya80j",
+    "registrationVerificationTokenExpiry": 1474554896178,
+    "isValidated": false,
+    "__v": 0,
+    "consents": [],
+    "clients": [],
+    "accessToken": [],
+    "userType": "creator"
+  }
+}          
+</code></pre></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_user_auth_authtokenverification"><span class="parent">/user/auth</span>/authtokenverification</a> <span class="methods"><a href="#user_auth_authtokenverification_put"><span class="badge badge_put">put</span></a></span></h4></div><div id="panel_user_auth_authtokenverification" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>Verify a user&#39;s auth token</p></div><div class="list-group"><div onclick="window.location.href = '#user_auth_authtokenverification_put'" class="list-group-item"><span class="badge badge_put">put</span><div class="method_description"><p>Verify a user&#39;s auth token</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="user_auth_authtokenverification_put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put</span> <span class="parent">/user/auth</span>/authtokenverification</h4></div><div class="modal-body"><div class="alert alert-info"><p>Verify a user&#39;s auth token</p></div><ul class="nav nav-tabs"><li class="active"><a href="#user_auth_authtokenverification_put_request" data-toggle="tab">Request</a></li><li><a href="#user_auth_authtokenverification_put_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="user_auth_authtokenverification_put_request"><h3>Headers</h3><ul><li><strong>token</strong>: <em>required (string)</em><p>Access token</p><p><strong>Example</strong>:</p><pre>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QifQ.GBqaEDZ8jmJhx-0fQrhzOR-LU8cMxKHSE1avL3pjJs0</pre></li></ul></div><div class="tab-pane" id="user_auth_authtokenverification_put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "success",
+    "message": null
+  },
+  "data": {
+    "isValidToken": true,
+    "idToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTQ1MjUwMjMsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNCUyMiU3RCJ9.KO6rC7g_maD4l7CwK2YzQvdnXEz_vi61n9Tm3XEtLAs"
+  }
+}           
+</code></pre></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_user_auth_registrationverification"><span class="parent">/user/auth</span>/registrationverification</a> <span class="methods"><a href="#user_auth_registrationverification_put"><span class="badge badge_put">put</span></a></span></h4></div><div id="panel_user_auth_registrationverification" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>Validate a user&#39;s registration using the registrationVerificationToken obtained from the user profile.</p></div><div class="list-group"><div onclick="window.location.href = '#user_auth_registrationverification_put'" class="list-group-item"><span class="badge badge_put">put</span><div class="method_description"><p>Validate a user&#39;s registration using the registrationVerificationToken obtained from the user profile.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="user_auth_registrationverification_put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put</span> <span class="parent">/user/auth</span>/registrationverification</h4></div><div class="modal-body"><div class="alert alert-info"><p>Validate a user&#39;s registration using the registrationVerificationToken obtained from the user profile.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#user_auth_registrationverification_put_request" data-toggle="tab">Request</a></li><li><a href="#user_auth_registrationverification_put_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="user_auth_registrationverification_put_request"><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "username": "joao@test.com",
+  "registrationVerificationToken": "6fbya80j"
+}
+</code></pre></div><div class="tab-pane" id="user_auth_registrationverification_put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "success",
+    "message": null
+  },
+  "data": null
+}
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/409" target="_blank">409</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "failure",
+    "message": {
+      "key": "VERIFICATION_CODE",
+      "value": "Verification code is incorrect."
+    }
+  },
+  "data": null
+}
+</code></pre></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_user_auth_orcid_clientId__clientId_"><span class="parent">/user/auth</span>/orcid?clientId={clientId}</a> <span class="methods"><a href="#user_auth_orcid_clientId__clientId__get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_user_auth_orcid_clientId__clientId_" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>Authenticate with ORCID login</p></div><div class="list-group"><div onclick="window.location.href = '#user_auth_orcid_clientId__clientId__get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Authenticate through ORCID.org (login attempt). Request is redirected to the ORCID login page. End user fills out his ORCID login details and authorizes our request. Lastly the callback response is redirected to ./orcid/callback.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="user_auth_orcid_clientId__clientId__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/user/auth</span>/orcid?clientId={clientId}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Authenticate through ORCID.org (login attempt). Request is redirected to the ORCID login page. End user fills out his ORCID login details and authorizes our request. Lastly the callback response is redirected to ./orcid/callback.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#user_auth_orcid_clientId__clientId__get_request" data-toggle="tab">Request</a></li><li><a href="#user_auth_orcid_clientId__clientId__get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="user_auth_orcid_clientId__clientId__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>Application&#39;s ID on database</p><p><strong>Example</strong>:</p><pre>1</pre></li></ul></div><div class="tab-pane" id="user_auth_orcid_clientId__clientId__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Headers</h3><ul><li><strong>location</strong>: <em>(string)</em><p><strong>Example</strong>:</p><pre>http://www.&lt;clientCallbackURL&gt;.com?status=success&amp;token=eyJ0eXAiOiJKV1QiLCJhbGc</pre></li></ul><h2>HTTP status code <a href="http://httpstatus.es/307" target="_blank">307</a></h2><h3>Headers</h3><ul><li><strong>location</strong>: <em>(string)</em><p><strong>Example</strong>:</p><pre>http://www.&lt;clientCallbackURL&gt;.com?status=success&amp;token=eyJ0eXAiOiJKV1QiLCJhbGc</pre></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_user_auth_search"><span class="parent">/user/auth</span>/search</a> <span class="methods"><a href="#user_auth_search_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_user_auth_search" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>Search for a user by their username</p></div><div class="list-group"><div onclick="window.location.href = '#user_auth_search_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Search for user with their username</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="user_auth_search_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/user/auth</span>/search</h4></div><div class="modal-body"><div class="alert alert-info"><p>Search for user with their username</p></div><ul class="nav nav-tabs"><li class="active"><a href="#user_auth_search_get_request" data-toggle="tab">Request</a></li><li><a href="#user_auth_search_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="user_auth_search_get_request"><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "username" : "test@test.com"
+}
+</code></pre></div><div class="tab-pane" id="user_auth_search_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "success",
+    "message": null
+  },
+  "data": [
+    {
+      "_id": "5798b87c9fb6ab8836f3112e",
+      "username": "test@test.com",
+      "firstName": "First",
+      "lastName": "Lastname",
+      "organization": "An Institution",
+      "jobTitle": "Academic Professional",
+      "dob": "01-01-1981",
+      "mobilePhone": "9541234567",
+      "fax": "9547654321",
+      "email": "test@test.com",
+      "address": {
+        "addressLine1": "ABC Hotel",
+        "addressLine2": "Suite 300",
+        "city": "Miami",
+        "state": "FL",
+        "country": "USA",
+        "zipCode": 33333
+      },
+      "credential": null,
+      "createdOn": 1469626402716,
+      "displayName": "First Lastname",
+      "registrationVerificationToken": null,
+      "registrationVerificationTokenExpiry": 1469628202716,
+      "isValidated": false,
+      "__v": 0,
+      "consents": [],
+      "clients": [],
+      "accessToken": null,
+      "userType": "shopper"
+    }
+  ]
+}
+</code></pre></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_user_auth_forgotpassword"><span class="parent">/user/auth</span>/forgotpassword</a> <span class="methods"><a href="#user_auth_forgotpassword_get"><span class="badge badge_get">get</span></a> <a href="#user_auth_forgotpassword_post"><span class="badge badge_post">post</span></a> <a href="#user_auth_forgotpassword_put"><span class="badge badge_put">put</span></a></span></h4></div><div id="panel_user_auth_forgotpassword" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>Forgot Password Flow - GET with username to generate a resetPasswordToken. POST to validate the resetPasswordToken. PUT username and newPassword to update the user&#39;s password.</p></div><div class="list-group"><div onclick="window.location.href = '#user_auth_forgotpassword_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Step 1. This will generate a resetPasswordToken for user {username}.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#user_auth_forgotpassword_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Step 2. Validate Reset Password Token</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#user_auth_forgotpassword_put'" class="list-group-item"><span class="badge badge_put">put</span><div class="method_description"><p>Step 3. Change the user&#39;s password to his choosing. Will only work after validation.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="user_auth_forgotpassword_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/user/auth</span>/forgotpassword</h4></div><div class="modal-body"><div class="alert alert-info"><p>Step 1. This will generate a resetPasswordToken for user {username}.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#user_auth_forgotpassword_get_request" data-toggle="tab">Request</a></li><li><a href="#user_auth_forgotpassword_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="user_auth_forgotpassword_get_request"><h3>Headers</h3><ul><li><strong>username</strong>: <em>required (string - pattern: ^\w+@[a-zA-Z_]+?.[a-zA-Z]{2,3}$)</em><p>Unique email address to serve as a username</p><p><strong>Example</strong>:</p><pre>admin@admin.com</pre></li></ul></div><div class="tab-pane" id="user_auth_forgotpassword_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "success",
+    "message": null
+  },
+  "data": {
+    "token": "m0urn8h8"
+  }
+}    
+</code></pre></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="user_auth_forgotpassword_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent">/user/auth</span>/forgotpassword</h4></div><div class="modal-body"><div class="alert alert-info"><p>Step 2. Validate Reset Password Token</p></div><ul class="nav nav-tabs"><li class="active"><a href="#user_auth_forgotpassword_post_request" data-toggle="tab">Request</a></li><li><a href="#user_auth_forgotpassword_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="user_auth_forgotpassword_post_request"><h3>Headers</h3><ul><li><strong>username</strong>: <em>required (string - pattern: ^\w+@[a-zA-Z_]+?.[a-zA-Z]{2,3}$)</em><p>Unique email address to serve as a username</p><p><strong>Example</strong>:</p><pre>admin@admin.com</pre></li><li><strong>resetPasswordToken</strong>: <em>required (string - minLength: 8 - maxLength: 8)</em><p>User&#39;s reset password token to validate</p><p><strong>Example</strong>:</p><pre>tftxryz1</pre></li></ul><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+    "username": "test@test.com",
+    "resetPasswordToken": "tftxryz1"
+}
+</code></pre></div><div class="tab-pane" id="user_auth_forgotpassword_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "success",
+    "message": null
+  },
+  "data": "test@test.com"
+}
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/409" target="_blank">409</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "failure",
+    "message": {
+      "key": "RESET_PASSWORD_TOKEN",
+      "value": "resetPasswordToken mismatch"
+    }
+  },
+  "data": null
+}
+</code></pre></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="user_auth_forgotpassword_put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put</span> <span class="parent">/user/auth</span>/forgotpassword</h4></div><div class="modal-body"><div class="alert alert-info"><p>Step 3. Change the user&#39;s password to his choosing. Will only work after validation.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#user_auth_forgotpassword_put_request" data-toggle="tab">Request</a></li><li><a href="#user_auth_forgotpassword_put_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="user_auth_forgotpassword_put_request"><h3>Headers</h3><ul><li><strong>username</strong>: <em>required (string - pattern: ^\w+@[a-zA-Z_]+?.[a-zA-Z]{2,3}$)</em><p>Unique email address to serve as a username</p><p><strong>Example</strong>:</p><pre>admin@admin.com</pre></li><li><strong>resetPasswordToken</strong>: <em>required (string - minLength: 8 - maxLength: 8)</em><p>User&#39;s reset password token to validate</p><p><strong>Example</strong>:</p><pre>tftxryz1</pre></li><li><strong>password</strong>: <em>required (string - minLength: 8 - pattern: ^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[$"?@$!%*#_ +=|~?&()/.,<>`,[\]^"';\\:{}\-]).{8,}$)</em><p>User&#39;s password must be at least 8 characters.</p><p><strong>Example</strong>:</p><pre>Admin123$$$</pre></li></ul><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+    "username": "test@test.com",
+    "resetPasswordToken": "tftxryz1",
+    "newPassword": "Admin123$$$"
+}
+</code></pre></div><div class="tab-pane" id="user_auth_forgotpassword_put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "success",
+    "message": null
+  },
+  "data": "test@test.com"
+}               
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/404" target="_blank">404</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "failure",
+    "message": {
+      "key": "RESET_PASSWORD_TOKEN",
+      "value": "resetPasswordToken not validated"
+    }
+  },
+  "data": null
+}
+</code></pre></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_user_self"><span class="parent">/user</span>/self</a> <span class="methods"><a href="#user_self_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_user_self" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#user_self_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Get user orcid profile information with header authtoken</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="user_self_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/user</span>/self</h4></div><div class="modal-body"><div class="alert alert-info"><p>Get user orcid profile information with header authtoken</p></div><ul class="nav nav-tabs"><li class="active"><a href="#user_self_get_request" data-toggle="tab">Request</a></li><li><a href="#user_self_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="user_self_get_request"><h3>Headers</h3><ul><li><strong>authtoken</strong>: <em>required (string)</em><p>User authentication token</p><p><strong>Example</strong>:</p><pre>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3RAdGVzdC5jb20iLCJjbGllbnQiOiIlN0IlMjJhZ2VudCUyMjolMjJNb3ppbGxhLzUuMCUyMChXaW5kb3dzJTIwTlQlMjAxMC4wOyUyMFdPVzY0KSUyMEFwcGxlV2ViS2l0LzUzNy4zNiUyMChLSFRNTCwlMjBsaWtlJTIwR2Vja28pJTIwQ2hyb21lLzUxLjAuMjcwNC4xMDMlMjBTYWZhcmkvNTM3LjM2JTIyLCUyMmlwJTIyOiUyMjo6MSUyMiU3RCJ9.hTshaga0-zV4DziiN0hEjHszIYkaRN6PHenzyl0POpo</pre></li></ul></div><div class="tab-pane" id="user_self_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "success",
+    "message": null
+  },
+  "data": {
+    "__v": 0,
+    "lastUpdatedOn": {
+      "value": 1470233502385
+    },
+    "orcidId": "0000-0003-3771-3111",
+    "username": "sharadkumar@mailinator.com",
+    "email": "sharadkumar@mailinator.com",
+    "firstName": "sharad",
+    "lastName": "kumar",
+    "organization": "",
+    "jobTitle": "",
+    "dob": "2016-08-03T14:11:43.790Z",
+    "createdOn": 1470233503790,
+    "isValidated": true,
+    "registrationVerificationToken": "",
+    "registrationVerificationTokenExpiry": 1470233503790,
+    "language": "English",
+    "mobilePhone": "",
+    "homePhone": "",
+    "businessPhone": "",
+    "fax": "",
+    "address": {
+      "zipCode": "",
+      "country": "",
+      "city": "",
+      "state": "",
+      "addressLine2": "",
+      "addressLine1": ""
+    },
+    "otherNames": [
+      "Sharad From TnF"
+    ],
+    "creditName": "",
+    "authorInstitution": [
+      {
+        "department": null,
+        "jobTitle": null,
+        "visibility": "PUBLIC",
+        "type": "EMPLOYMENT",
+        "address": {
+          "region": null,
+          "country": "HK",
+          "city": "Kowloon"
+        },
+        "name": "Hong Kong University of Science and Technology"
+      },
+      {
+        "department": "some department",
+        "jobTitle": "researcher",
+        "endDate": "09/17/2000",
+        "startDate": "02/16/2000",
+        "visibility": "PUBLIC",
+        "type": "EMPLOYMENT",
+        "address": {
+          "region": "MA",
+          "country": "US",
+          "city": "Boston"
+        },
+        "name": "Boston University School of XXXXX"
+      }
+    ],
+    "fundings": [{
+      "grantNumber": "abc",
+      "fundingUrl": "http://alternateUrl.com",
+      "currencyCode": "USD",
+      "address": {
+        "region": null,
+        "country": "BB",
+        "city": "ny"
+      },
+      "fundingOrganisation": "yyy",
+      "visibility": "PUBLIC",
+      "fundingType": "CONTRACT"
+    }, {
+      "fundingUrl": "",
+      "currencyCode": "EEK",
+      "address": {
+        "region": "NY",
+        "country": "US",
+        "city": "ny"
+      },
+      "fundingOrganisation": "Aaron Corpland Fund for Music",
+      "visibility": "PUBLIC",
+      "fundingType": "AWARD"
+    }],
+    "_id": "57a1fba0df3ba1842fa5b1e2",
+    "userType": "author"
+  }
+}
+  
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/400" target="_blank">400</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "failure",
+    "message": {
+      "key": "ACCESS_TOKEN",
+      "value": "TOKEN not present in request header"
+    }
+  },
+  "data": null
+}
+</code></pre></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_user_list"><span class="parent">/user</span>/list</a> <span class="methods"><a href="#user_list_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_user_list" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>List 1 registered user. Used for testing availability.</p></div><div class="list-group"><div onclick="window.location.href = '#user_list_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Get 1 registered user. Used for testing availability.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="user_list_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/user</span>/list</h4></div><div class="modal-body"><div class="alert alert-info"><p>Get 1 registered user. Used for testing availability.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#user_list_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="user_list_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "success",
+    "message": null
+  },
+  "data": [
+    {
+      "_id": "5799f1d377c494ba47a465fc",
+      "username": "tricon_1@mailinator.com",
+      "firstName": "Tricon",
+      "lastName": "Two",
+      "jobTitle": "Sales",
+      "email": "tricon_1@mailinator.com",
+      "credential": null,
+      "createdOn": 1469706671749,
+      "displayName": "Tricon One",
+      "registrationVerificationToken": null,
+      "registrationVerificationTokenExpiry": 1469708471749,
+      "isValidated": false,
+      "__v": 0,
+      "consents": [],
+      "clients": [],
+      "accessToken": null,
+      "userType": "shopper"
+    }
+  ]
+}
+</code></pre></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_user__id_"><span class="parent">/user</span>/{id}</a> <span class="methods"><a href="#user__id__get"><span class="badge badge_get">get</span></a> <a href="#user__id__put"><span class="badge badge_put">put</span></a> <a href="#user__id__delete"><span class="badge badge_delete">delete</span></a></span></h4></div><div id="panel_user__id_" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>Read, Update and Delete users by their ID.</p></div><div class="list-group"><div onclick="window.location.href = '#user__id__get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Get user information by their ID</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#user__id__put'" class="list-group-item"><span class="badge badge_put">put</span><div class="method_description"><p>Update any and all user information with their ID.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#user__id__delete'" class="list-group-item"><span class="badge badge_delete">delete</span><div class="method_description"><p>Delete user by their ID</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="user__id__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/user</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Get user information by their ID</p></div><ul class="nav nav-tabs"><li class="active"><a href="#user__id__get_request" data-toggle="tab">Request</a></li><li><a href="#user__id__get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="user__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>User&#39;s ID on database</p><p><strong>Example</strong>:</p><pre>5750394d9b7b6d741edbcd29</pre></li></ul><h3>Headers</h3><ul><li><strong>token</strong>: <em>required (string)</em><p>Access token</p><p><strong>Example</strong>:</p><pre>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTQ1MjUwMjMsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNCUyMiU3RCJ9.KO6rC7g_maD4l7CwK2YzQvdnXEz_vi61n9Tm3XEtLAs</pre></li></ul></div><div class="tab-pane" id="user__id__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "success",
+    "message": null
+  },
+  "data": {
+    "_id": "57e3e508aa3028465ca1c0bc",
+    "username": "joao@test.com",
+    "firstName": "Joao",
+    "lastName": "Lastname",
+    "organization": "An Institution",
+    "jobTitle": "Academic Professional",
+    "dob": "01-01-1981",
+    "mobilePhone": "9541234567",
+    "fax": "9547654321",
+    "email": "joao@test.com",
+    "address": {
+      "addressLine1": "ABC Hotel",
+      "addressLine2": "Suite 300",
+      "city": "Miami",
+      "state": "FL",
+      "country": "USA",
+      "zipCode": 33333
+    },
+    "credential": {
+      "username": "joao@test.com",
+      "password": "$2a$10$95TXm76Wtf1jj5cf2xwXnOR6v0ecmm20iPm9VPPczfN0DOAxlplgq"
+    },
+    "createdOn": 1474553096178,
+    "displayName": "Joao Lastname",
+    "registrationVerificationToken": null,
+    "registrationVerificationTokenExpiry": 1474554896178,
+    "isValidated": true,
+    "__v": 0,
+    "consents": [],
+    "clients": [],
+    "accessToken": [
+      {
+        "scope": "",
+        "clientId": "%7B%22agent%22:%22Mozilla/5.0%20(Windows%20NT%2010.0;%20WOW64)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/53.0.2785.116%20Safari/537.36%22,%22ip%22:%22199.26.78.10,%2010.135.97.151%22%7D",
+        "username": "joao@test.com",
+        "expiry": 1474558418467,
+        "idToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTY2MTg0NjcsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNTElMjIlN0QifQ.5ZRp_o1PV5eo6fdIvTZdxR8pfa8soA57ldRza9DEIh0",
+        "type": "user-access-token",
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTY2MTg0NjcsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNTElMjIlN0QifQ.5ZRp_o1PV5eo6fdIvTZdxR8pfa8soA57ldRza9DEIh0"
+      }
+    ],
+    "userType": "creator"
+  }
+}
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/401" target="_blank">401</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "failure",
+    "message": "invalid user acess token : eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTQ1MjUwMjMsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNCUyMiU3RCJ9.KO6rC7g_maD4l7CwK2YzQvdnXEz_vi61n9Tm3XEtLAs"
+  },
+  "data": null
+}
+</code></pre></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="user__id__put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put</span> <span class="parent">/user</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Update any and all user information with their ID.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#user__id__put_request" data-toggle="tab">Request</a></li><li><a href="#user__id__put_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="user__id__put_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>User&#39;s ID on database</p><p><strong>Example</strong>:</p><pre>5750394d9b7b6d741edbcd29</pre></li></ul><h3>Headers</h3><ul><li><strong>token</strong>: <em>required (string)</em><p>Access token</p><p><strong>Example</strong>:</p><pre>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTQ1MjUwMjMsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNCUyMiU3RCJ9.KO6rC7g_maD4l7CwK2YzQvdnXEz_vi61n9Tm3XEtLAs</pre></li></ul><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "firstName": "NotJohn",
+  "myTestField": "myTestValue"
+}
+</code></pre><p><strong>Type: application/x-www-form-urlencoded</strong></p><strong>Form Parameters</strong><ul><li><strong>Any Field Key And Value Here</strong>: <em>(string)</em><p>This key will overwrite/update existing value or create a new field.</p><p><strong>Example</strong>:</p><pre>Name this parameter &#39;firstName&#39; and value of &#39;NotJohn&#39;</pre></li></ul></div><div class="tab-pane" id="user__id__put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "success",
+    "message": null
+  },
+  "data": {
+    "_id": "57e3e508aa3028465ca1c0bc",
+    "username": "joao@test.com",
+    "firstName": "NotJohn",
+    "lastName": "Lastname",
+    "organization": "An Institution",
+    "jobTitle": "Academic Professional",
+    "dob": "01-01-1981",
+    "mobilePhone": "9541234567",
+    "fax": "9547654321",
+    "email": "joao@test.com",
+    "address": {
+      "addressLine1": "ABC Hotel",
+      "addressLine2": "Suite 300",
+      "city": "Miami",
+      "state": "FL",
+      "country": "USA",
+      "zipCode": 33333
+    },
+    "credential": {
+      "username": "joao@test.com",
+      "password": "$2a$10$95TXm76Wtf1jj5cf2xwXnOR6v0ecmm20iPm9VPPczfN0DOAxlplgq"
+    },
+    "createdOn": 1474553096178,
+    "displayName": "Joao Lastname",
+    "registrationVerificationToken": null,
+    "registrationVerificationTokenExpiry": 1474554896178,
+    "isValidated": true,
+    "__v": 0,
+    "myTestField": "myTestValue",
+    "firstname": "NotJohn",
+    "consents": [],
+    "clients": [],
+    "accessToken": [
+      {
+        "scope": "",
+        "clientId": "%7B%22agent%22:%22Mozilla/5.0%20(Windows%20NT%2010.0;%20WOW64)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/53.0.2785.116%20Safari/537.36%22,%22ip%22:%22199.26.78.10,%2010.135.97.151%22%7D",
+        "username": "joao@test.com",
+        "expiry": 1474558418467,
+        "idToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTY2MTg0NjcsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNTElMjIlN0QifQ.5ZRp_o1PV5eo6fdIvTZdxR8pfa8soA57ldRza9DEIh0",
+        "type": "user-access-token",
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTY2MTg0NjcsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNTElMjIlN0QifQ.5ZRp_o1PV5eo6fdIvTZdxR8pfa8soA57ldRza9DEIh0"
+      }
+    ],
+    "userType": "creator"
+  }
+}
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/401" target="_blank">401</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "failure",
+    "message": "invalid user acess token : eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTQ1MjUwMjMsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNCUyMiU3RCJ9.KO6rC7g_maD4l7CwK2YzQvdnXEz_vi61n9Tm3XEtLAs"
+  },
+  "data": null
+}
+</code></pre></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="user__id__delete"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_delete">delete</span> <span class="parent">/user</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Delete user by their ID</p></div><ul class="nav nav-tabs"><li class="active"><a href="#user__id__delete_request" data-toggle="tab">Request</a></li><li><a href="#user__id__delete_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="user__id__delete_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>User&#39;s ID on database</p><p><strong>Example</strong>:</p><pre>5750394d9b7b6d741edbcd29</pre></li></ul><h3>Headers</h3><ul><li><strong>token</strong>: <em>required (string)</em><p>Access token</p><p><strong>Example</strong>:</p><pre>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTQ1MjUwMjMsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNCUyMiU3RCJ9.KO6rC7g_maD4l7CwK2YzQvdnXEz_vi61n9Tm3XEtLAs</pre></li></ul></div><div class="tab-pane" id="user__id__delete_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "success",
+    "message": null
+  },
+  "data": {
+    "_id": "57e3e508aa3028465ca1c0bc",
+    "username": "joao@test.com",
+    "firstName": "NotJohn",
+    "lastName": "Lastname",
+  }
+}</code></pre><h2>HTTP status code <a href="http://httpstatus.es/401" target="_blank">401</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "metadata": {
+    "status": "failure",
+    "message": "invalid user acess token : eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTQ1MjUwMjMsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNCUyMiU3RCJ9.KO6rC7g_maD4l7CwK2YzQvdnXEz_vi61n9Tm3XEtLAs"
+  },
+  "data": null
+}        
+</code></pre></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#user">/user</a></li></ul></div></div></div></div></body></html>

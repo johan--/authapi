@@ -1,0 +1,15 @@
+[
+    {
+    "ipaddress": "192.168.4.1",
+    "organization":{
+        "name": "tnf"
+       }
+    },
+    {
+    "ipaddress": "192.168.4.2",
+    "organization":{
+        "name": "tnf2"
+       }
+    }
+    
+]

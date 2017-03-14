@@ -1,0 +1,59 @@
+{
+    "apps": [{
+            "name": "authuserapi",
+            "script": "app.js",
+            "description": "pm2 startOrRestart ecosystem.json --env dev",
+            "cwd": "/srv/www/authapi/dist/src/app/",
+            "error_file" : "/var/log/tandf/authuser-api/error.log",
+            "out_file" : "/var/log/tandf/authuser-api/out.log",
+            "env": {
+                "repo": "ssh://git@usmia-gitp2.crcpress.local:7999/cp/authuser-api.git",
+                "path": "/srv/www/authapi",
+                "NODE_ENV": "dev"
+            },
+            "env_dev": {
+                "NODE_ENV": "dev"
+            },
+            "env_local": {
+                "NODE_ENV": "local"
+            },
+            "env_test": {
+                "NODE_ENV": "test"
+            },
+            "env_uat": {
+                "NODE_ENV": "uat"
+            },
+            "env_prod": {
+                "NODE_ENV": "prod"
+            }
+    }],
+    "deploy": {
+        "dev" : {
+            "pre-deploy-local" : "echo 'PM2 This is a local executed command'",
+            // Commands to be executed on the server after the repo has been cloned
+            "post-deploy" : "echo 'PM2 Post-deploy Start application'; pm2 startOrRestart ecosystem.json --env dev",
+            // Environment variables that must be injected in all applications on this env 
+            "env"  : {
+                "NODE_ENV": "dev"
+            }
+        },
+        "uat" : {
+            "pre-deploy-local" : "echo 'PM2 This is a local executed command'",
+            // Commands to be executed on the server after the repo has been cloned
+            "post-deploy" : "echo 'PM2 Post-deploy Start application'; pm2 startOrRestart ecosystem.json --env uat",
+            // Environment variables that must be injected in all applications on this env 
+            "env"  : {
+                "NODE_ENV": "uat"
+            }
+        },
+        "prod" : {
+            "pre-deploy-local" : "echo 'PM2 This is a local executed command'",
+            // Commands to be executed on the server after the repo has been cloned
+            "post-deploy" : "echo 'PM2 Post-deploy Start application'; pm2 startOrRestart ecosystem.json --env prod",
+            // Environment variables that must be injected in all applications on this env 
+            "env"  : {
+                "NODE_ENV": "prod"
+            }
+        }
+    }
+}

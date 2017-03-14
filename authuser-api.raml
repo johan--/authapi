@@ -1,0 +1,951 @@
+#%RAML 0.8
+title: AuthUser API
+version: Beta
+#baseUri: http://localhost:3000/
+baseUri: https://mocksvc.mulesoft.com/mocks/2b13f76a-4794-4729-bf46-0d52d3400b53/mocks/1cd02915-0218-4cb3-8658-271b8237950e/user/
+
+/user:
+  description: | 
+    A user management API - A point of user management for all of T&F. <br /><br />
+    Please check out our source code here: http://bitbucket.crcpress.local:7990/projects/CP/repos/authuser-api/browse
+
+  /auth:
+
+    /signup:
+      description: Register a user with basic information First and Last name, username (email) and password.
+      post:
+        description: Register a user with basic information First and Last name, username (email) and password.
+        body:
+          application/json:
+            example: |
+              {
+                "userType": "creator",
+                "username": "joao@test.com",
+                "password": "Admin123@#$@",
+                "email": "joao@test.com",
+                "firstName": "Joao",
+                "lastName": "Lastname",
+                "dob": "01-01-1981",
+                "jobTitle" : "Academic Professional",
+                "organization" : "An Institution",
+                "gender": "M",
+                "mobilePhone" : "9541234567",
+                "fax":"9547654321",
+                "address": {
+                    "addressLine1": "ABC Hotel",
+                    "addressLine2": "Suite 300",
+                    "city": "Miami",
+                    "state": "FL",
+                    "country": "USA",
+                    "zipCode": 33333
+                }
+              }
+          application/x-www-form-urlencoded:
+            formParameters:
+              username:
+                displayName: username
+                type: string
+                description: Unique email address to serve as a username 
+                example: admin@admin.com
+                required: true
+                pattern: ^\w+@[a-zA-Z_]+?.[a-zA-Z]{2,3}$
+              password:
+                displayName: password
+                type: string
+                description: Password must be at least 8 characters long and include at least one of each of 0-9, a-z, A-Z and Symbol (e.g. ! # ? $).
+                example: Admin123$$$
+                required: true
+                minLength: 8
+                pattern: ^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[$"?@$!%*#_ +=|~?&()/.,<>`,[\]^"';\\:{}\-]).{8,}$
+              firstname:
+                displayName: firstname
+                type: string
+                description: User's first name
+                example: John
+                required: true
+              lastname:
+                displayName: lastname
+                type: string
+                description: User's last name
+                example: Albuquerque
+                required: true
+              middlename:
+                displayName: middlename
+                type: string
+                description: User's middle name
+                example: Claudio
+                required: false
+              country:
+                displayName: country
+                type: string
+                description: User's region/country
+                example: USA
+                required: true              
+              anyFieldKeyAndValue:
+                displayName: Any Field Key And Value Here
+                type: string
+                description: This key will overwrite/update existing value or create a new field.
+                example: Name this parameter 'firstName' and value of 'NotJohn'
+                required: false                            
+        responses:
+            200:
+              body:
+                application/json:
+                  example: |
+                    {
+                      "metadata": {
+                        "status": "success"
+                      },
+                      "data": {
+                        "__v": 0,
+                        "username": "joao@test.com",
+                        "firstName": "Joao",
+                        "lastName": "Lastname",
+                        "organization": "An Institution",
+                        "jobTitle": "Academic Professional",
+                        "dob": "01-01-1981",
+                        "mobilePhone": "9541234567",
+                        "fax": "9547654321",
+                        "email": "joao@test.com",
+                        "address": {
+                          "zipCode": 33333,
+                          "country": "USA",
+                          "state": "FL",
+                          "city": "Miami",
+                          "addressLine2": "Suite 300",
+                          "addressLine1": "ABC Hotel"
+                        },
+                        "credential": {
+                          "password": "$2a$10$95TXm76Wtf1jj5cf2xwXnOR6v0ecmm20iPm9VPPczfN0DOAxlplgq",
+                          "username": "joao@test.com"
+                        },
+                        "createdOn": 1474553096178,
+                        "displayName": "Joao Lastname",
+                        "registrationVerificationToken": "6fbya80j",
+                        "registrationVerificationTokenExpiry": 1474554896178,
+                        "isValidated": false,
+                        "_id": "57e3e508aa3028465ca1c0bc",
+                        "consents": [],
+                        "clients": [],
+                        "accessToken": [
+                          {
+                            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTMwOTYxNzgsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny43OSUyMiU3RCJ9.o1MfeSPyM34I0KMpfBRRH0ws6lviQkZyRi0EwY5T5O4",
+                            "expiry": 1474554896178,
+                            "username": "joao@test.com",
+                            "clientId": "%7B%22agent%22:%22Mozilla/5.0%20(Windows%20NT%2010.0;%20WOW64)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/53.0.2785.116%20Safari/537.36%22,%22ip%22:%22199.26.78.10,%2010.135.97.79%22%7D"
+                          }
+                        ],
+                        "userType": "creator"
+                      }
+                    }
+
+    /login:
+      description: Authenticate a username and password (login attempt)
+      post:
+        description: Authenticate a username and password (login attempt)
+        body:
+          application/json:
+            example: |
+              {
+                  "username": "test@test.com",
+                  "password": "admin123"
+              }
+          application/x-www-form-urlencoded:
+            formParameters:
+              username:
+                displayName: username
+                type: string
+                description: Unique email address to serve as a username 
+                example: admin@admin.com
+                required: true
+                pattern: ^\w+@[a-zA-Z_]+?.[a-zA-Z]{2,3}$
+              password:
+                displayName: password
+                type: string
+                description: User's password must be at least 8 characters.
+                example: admin123
+                required: true
+                minLength: 8
+        responses:
+          404:
+            body:
+              application/json:
+                example: |
+                  {
+                    "metadata": {
+                      "status": "failure",
+                      "message": {
+                        "key": "EMAIL_ADDRESS",
+                        "value": "Invalid email address."
+                      }
+                    },
+                    "data": null
+                  }
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "metadata": {
+                      "status": "success",
+                      "message": null
+                    },
+                    "data": {
+                      "_id": "57e3e508aa3028465ca1c0bc",
+                      "username": "joao@test.com",
+                      "firstName": "Joao",
+                      "lastName": "Lastname",
+                      "organization": "An Institution",
+                      "jobTitle": "Academic Professional",
+                      "dob": "01-01-1981",
+                      "mobilePhone": "9541234567",
+                      "fax": "9547654321",
+                      "email": "joao@test.com",
+                      "address": {
+                        "addressLine1": "ABC Hotel",
+                        "addressLine2": "Suite 300",
+                        "city": "Miami",
+                        "state": "FL",
+                        "country": "USA",
+                        "zipCode": 33333
+                      },
+                      "credential": {
+                        "username": "joao@test.com",
+                        "password": "$2a$10$95TXm76Wtf1jj5cf2xwXnOR6v0ecmm20iPm9VPPczfN0DOAxlplgq"
+                      },
+                      "createdOn": 1474553096178,
+                      "displayName": "Joao Lastname",
+                      "registrationVerificationToken": "6fbya80j",
+                      "registrationVerificationTokenExpiry": 1474554896178,
+                      "isValidated": false,
+                      "__v": 0,
+                      "consents": [],
+                      "clients": [],
+                      "accessToken": [
+                        {
+                          "scope": "",
+                          "clientId": "%7B%22agent%22:%22Mozilla/5.0%20(Windows%20NT%2010.0;%20WOW64)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/53.0.2785.116%20Safari/537.36%22,%22ip%22:%22199.26.78.10,%2010.135.97.151%22%7D",
+                          "username": "joao@test.com",
+                          "expiry": 1474555078804,
+                          "idToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTMyNzg4MDQsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNTElMjIlN0QifQ.IhBvTILtveFsWDr_ehhjtIpzASZfbqVa4Tu8MJu-PVw",
+                          "type": "user-access-token",
+                          "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTMyNzg4MDQsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNTElMjIlN0QifQ.IhBvTILtveFsWDr_ehhjtIpzASZfbqVa4Tu8MJu-PVw"
+                        }
+                      ],
+                      "userType": "creator"
+                    }
+                  }
+
+    /logout:
+      description: Log a user out
+      post:
+        description: Log out a user with their auth token
+        headers:
+          authToken:
+            displayName: authToken
+            type: string
+            description: User's Auth token
+            example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3RAdGVzdC5jb20iLCJjbGllbnQiOiIlN0IlMjJhZ2VudCUyMjolMjJNb3ppbGxhLzUuMCUyMChXaW5kb3dzJTIwTlQlMjAxMC4wOyUyMFdPVzY0KSUyMEFwcGxlV2ViS2l0LzUzNy4zNiUyMChLSFRNTCwlMjBsaWtlJTIwR2Vja28pJTIwQ2hyb21lLzUxLjAuMjcwNC4xMDMlMjBTYWZhcmkvNTM3LjM2JTIyLCUyMmlwJTIyOiUyMjo6MSUyMiU3RCJ9.hTshaga0-zV4DziiN0hEjHszIYkaRN6PHenzyl0POpo
+            required: true
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "metadata": {
+                      "status": "success",
+                      "message": "User access token removed!"
+                    },
+                    "data": {
+                      "_id": "57e3e508aa3028465ca1c0bc",
+                      "username": "joao@test.com",
+                      "firstName": "Joao",
+                      "lastName": "Lastname",
+                      "organization": "An Institution",
+                      "jobTitle": "Academic Professional",
+                      "dob": "01-01-1981",
+                      "mobilePhone": "9541234567",
+                      "fax": "9547654321",
+                      "email": "joao@test.com",
+                      "address": {
+                        "addressLine1": "ABC Hotel",
+                        "addressLine2": "Suite 300",
+                        "city": "Miami",
+                        "state": "FL",
+                        "country": "USA",
+                        "zipCode": 33333
+                      },
+                      "credential": {
+                        "username": "joao@test.com",
+                        "password": "$2a$10$95TXm76Wtf1jj5cf2xwXnOR6v0ecmm20iPm9VPPczfN0DOAxlplgq"
+                      },
+                      "createdOn": 1474553096178,
+                      "displayName": "Joao Lastname",
+                      "registrationVerificationToken": "6fbya80j",
+                      "registrationVerificationTokenExpiry": 1474554896178,
+                      "isValidated": false,
+                      "__v": 0,
+                      "consents": [],
+                      "clients": [],
+                      "accessToken": [],
+                      "userType": "creator"
+                    }
+                  }          
+
+    /authtokenverification:
+      description: Verify a user's auth token
+      put:
+        description: Verify a user's auth token
+        headers:
+          token:
+            displayName: token
+            type: string
+            description: Access token
+            example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QifQ.GBqaEDZ8jmJhx-0fQrhzOR-LU8cMxKHSE1avL3pjJs0
+            required: true
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "metadata": {
+                      "status": "success",
+                      "message": null
+                    },
+                    "data": {
+                      "isValidToken": true,
+                      "idToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTQ1MjUwMjMsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNCUyMiU3RCJ9.KO6rC7g_maD4l7CwK2YzQvdnXEz_vi61n9Tm3XEtLAs"
+                    }
+                  }           
+
+    /registrationverification:
+      description: Validate a user's registration using the registrationVerificationToken obtained from the user profile.
+      put:
+        description: Validate a user's registration using the registrationVerificationToken obtained from the user profile.
+        body:
+          application/json:
+            example: |
+              {
+                "username": "joao@test.com",
+                "registrationVerificationToken": "6fbya80j"
+              }
+        responses:
+          409:
+            body:
+              application/json:
+                example: |
+                  {
+                    "metadata": {
+                      "status": "failure",
+                      "message": {
+                        "key": "VERIFICATION_CODE",
+                        "value": "Verification code is incorrect."
+                      }
+                    },
+                    "data": null
+                  }
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "metadata": {
+                      "status": "success",
+                      "message": null
+                    },
+                    "data": null
+                  }
+
+    /orcid?clientId={clientId}:
+      description: Authenticate with ORCID login
+      uriParameters:
+        clientId:
+          displayName: id
+          type: string
+          description: Application's ID on database
+          example: 1
+          required: true
+      get:
+        description: Authenticate through ORCID.org (login attempt). Request is redirected to the ORCID login page. End user fills out his ORCID login details and authorizes our request. Lastly the callback response is redirected to ./orcid/callback.
+        responses:
+          200:
+            headers:
+              location:
+                example: http://www.<clientCallbackURL>.com?status=success&token=eyJ0eXAiOiJKV1QiLCJhbGc  
+          307:
+            headers:
+              location:
+                example: http://www.<clientCallbackURL>.com?status=success&token=eyJ0eXAiOiJKV1QiLCJhbGc            
+
+    /search:
+      description: Search for a user by their username
+      get:
+        description: Search for user with their username
+        body:
+          application/json:
+            example: |
+              {
+                "username" : "test@test.com"
+              }
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "metadata": {
+                      "status": "success",
+                      "message": null
+                    },
+                    "data": [
+                      {
+                        "_id": "5798b87c9fb6ab8836f3112e",
+                        "username": "test@test.com",
+                        "firstName": "First",
+                        "lastName": "Lastname",
+                        "organization": "An Institution",
+                        "jobTitle": "Academic Professional",
+                        "dob": "01-01-1981",
+                        "mobilePhone": "9541234567",
+                        "fax": "9547654321",
+                        "email": "test@test.com",
+                        "address": {
+                          "addressLine1": "ABC Hotel",
+                          "addressLine2": "Suite 300",
+                          "city": "Miami",
+                          "state": "FL",
+                          "country": "USA",
+                          "zipCode": 33333
+                        },
+                        "credential": null,
+                        "createdOn": 1469626402716,
+                        "displayName": "First Lastname",
+                        "registrationVerificationToken": null,
+                        "registrationVerificationTokenExpiry": 1469628202716,
+                        "isValidated": false,
+                        "__v": 0,
+                        "consents": [],
+                        "clients": [],
+                        "accessToken": null,
+                        "userType": "shopper"
+                      }
+                    ]
+                  }
+
+    /forgotpassword:
+      description: Forgot Password Flow - GET with username to generate a resetPasswordToken. POST to validate the resetPasswordToken. PUT username and newPassword to update the user's password.
+      get:
+        description: Step 1. This will generate a resetPasswordToken for user {username}.
+        headers:
+          username:
+            displayName: username
+            type: string
+            description: Unique email address to serve as a username 
+            example: admin@admin.com
+            required: true
+            pattern: ^\w+@[a-zA-Z_]+?.[a-zA-Z]{2,3}$
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "metadata": {
+                      "status": "success",
+                      "message": null
+                    },
+                    "data": {
+                      "token": "m0urn8h8"
+                    }
+                  }    
+      post:
+        description: Step 2. Validate Reset Password Token 
+        headers:
+          username:
+            displayName: username
+            type: string
+            description: Unique email address to serve as a username 
+            example: admin@admin.com
+            required: true
+            pattern: ^\w+@[a-zA-Z_]+?.[a-zA-Z]{2,3}$
+          resetPasswordToken:
+            displayName: resetPasswordToken
+            type: string
+            description: User's reset password token to validate
+            example: tftxryz1
+            required: true
+            minLength: 8
+            maxLength: 8
+        body:
+          application/json:
+            example: |
+              {
+                  "username": "test@test.com",
+                  "resetPasswordToken": "tftxryz1"
+              }
+        responses:
+          409:
+            body:
+              application/json:
+                example: |
+                  {
+                    "metadata": {
+                      "status": "failure",
+                      "message": {
+                        "key": "RESET_PASSWORD_TOKEN",
+                        "value": "resetPasswordToken mismatch"
+                      }
+                    },
+                    "data": null
+                  }
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "metadata": {
+                      "status": "success",
+                      "message": null
+                    },
+                    "data": "test@test.com"
+                  }
+      put:
+        description: Step 3. Change the user's password to his choosing. Will only work after validation.
+        headers:
+          username:
+            displayName: username
+            type: string
+            description: Unique email address to serve as a username 
+            example: admin@admin.com
+            required: true
+            pattern: ^\w+@[a-zA-Z_]+?.[a-zA-Z]{2,3}$
+          resetPasswordToken:
+            displayName: resetPasswordToken
+            type: string
+            description: User's reset password token to validate
+            example: tftxryz1
+            required: true
+            minLength: 8
+            maxLength: 8            
+          newPassword:
+            displayName: password
+            type: string
+            description: User's password must be at least 8 characters.
+            example: Admin123$$$
+            required: true
+            minLength: 8
+            pattern: ^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[$"?@$!%*#_ +=|~?&()/.,<>`,[\]^"';\\:{}\-]).{8,}$
+        body:
+          application/json:
+            example: |
+              {
+                  "username": "test@test.com",
+                  "resetPasswordToken": "tftxryz1",
+                  "newPassword": "Admin123$$$"
+              }
+        responses:
+          404:
+            body:  
+              application/json:
+                example: |
+                  {
+                    "metadata": {
+                      "status": "failure",
+                      "message": {
+                        "key": "RESET_PASSWORD_TOKEN",
+                        "value": "resetPasswordToken not validated"
+                      }
+                    },
+                    "data": null
+                  }
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "metadata": {
+                      "status": "success",
+                      "message": null
+                    },
+                    "data": "test@test.com"
+                  }               
+
+  /self:
+    get:
+      description: Get user orcid profile information with header authtoken
+      headers:
+        authToken:
+          displayName: authtoken
+          type: string
+          description: User authentication token
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3RAdGVzdC5jb20iLCJjbGllbnQiOiIlN0IlMjJhZ2VudCUyMjolMjJNb3ppbGxhLzUuMCUyMChXaW5kb3dzJTIwTlQlMjAxMC4wOyUyMFdPVzY0KSUyMEFwcGxlV2ViS2l0LzUzNy4zNiUyMChLSFRNTCwlMjBsaWtlJTIwR2Vja28pJTIwQ2hyb21lLzUxLjAuMjcwNC4xMDMlMjBTYWZhcmkvNTM3LjM2JTIyLCUyMmlwJTIyOiUyMjo6MSUyMiU3RCJ9.hTshaga0-zV4DziiN0hEjHszIYkaRN6PHenzyl0POpo
+          required: true
+      responses:
+        400:
+          body:
+            application/json:
+              example: |
+                {
+                  "metadata": {
+                    "status": "failure",
+                    "message": {
+                      "key": "ACCESS_TOKEN",
+                      "value": "TOKEN not present in request header"
+                    }
+                  },
+                  "data": null
+                }
+        200:
+          body:
+            application/json:        
+              example: |
+                {
+                  "metadata": {
+                    "status": "success",
+                    "message": null
+                  },
+                  "data": {
+                    "__v": 0,
+                    "lastUpdatedOn": {
+                      "value": 1470233502385
+                    },
+                    "orcidId": "0000-0003-3771-3111",
+                    "username": "sharadkumar@mailinator.com",
+                    "email": "sharadkumar@mailinator.com",
+                    "firstName": "sharad",
+                    "lastName": "kumar",
+                    "organization": "",
+                    "jobTitle": "",
+                    "dob": "2016-08-03T14:11:43.790Z",
+                    "createdOn": 1470233503790,
+                    "isValidated": true,
+                    "registrationVerificationToken": "",
+                    "registrationVerificationTokenExpiry": 1470233503790,
+                    "language": "English",
+                    "mobilePhone": "",
+                    "homePhone": "",
+                    "businessPhone": "",
+                    "fax": "",
+                    "address": {
+                      "zipCode": "",
+                      "country": "",
+                      "city": "",
+                      "state": "",
+                      "addressLine2": "",
+                      "addressLine1": ""
+                    },
+                    "otherNames": [
+                      "Sharad From TnF"
+                    ],
+                    "creditName": "",
+                    "authorInstitution": [
+                      {
+                        "department": null,
+                        "jobTitle": null,
+                        "visibility": "PUBLIC",
+                        "type": "EMPLOYMENT",
+                        "address": {
+                          "region": null,
+                          "country": "HK",
+                          "city": "Kowloon"
+                        },
+                        "name": "Hong Kong University of Science and Technology"
+                      },
+                      {
+                        "department": "some department",
+                        "jobTitle": "researcher",
+                        "endDate": "09/17/2000",
+                        "startDate": "02/16/2000",
+                        "visibility": "PUBLIC",
+                        "type": "EMPLOYMENT",
+                        "address": {
+                          "region": "MA",
+                          "country": "US",
+                          "city": "Boston"
+                        },
+                        "name": "Boston University School of XXXXX"
+                      }
+                    ],
+                    "fundings": [{
+                      "grantNumber": "abc",
+                      "fundingUrl": "http://alternateUrl.com",
+                      "currencyCode": "USD",
+                      "address": {
+                        "region": null,
+                        "country": "BB",
+                        "city": "ny"
+                      },
+                      "fundingOrganisation": "yyy",
+                      "visibility": "PUBLIC",
+                      "fundingType": "CONTRACT"
+                    }, {
+                      "fundingUrl": "",
+                      "currencyCode": "EEK",
+                      "address": {
+                        "region": "NY",
+                        "country": "US",
+                        "city": "ny"
+                      },
+                      "fundingOrganisation": "Aaron Corpland Fund for Music",
+                      "visibility": "PUBLIC",
+                      "fundingType": "AWARD"
+                    }],
+                    "_id": "57a1fba0df3ba1842fa5b1e2",
+                    "userType": "author"
+                  }
+                }
+                  
+  /list:
+    description: List 1 registered user. Used for testing availability.
+    get:
+      description: Get 1 registered user. Used for testing availability.
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "metadata": {
+                    "status": "success",
+                    "message": null
+                  },
+                  "data": [
+                    {
+                      "_id": "5799f1d377c494ba47a465fc",
+                      "username": "tricon_1@mailinator.com",
+                      "firstName": "Tricon",
+                      "lastName": "Two",
+                      "jobTitle": "Sales",
+                      "email": "tricon_1@mailinator.com",
+                      "credential": null,
+                      "createdOn": 1469706671749,
+                      "displayName": "Tricon One",
+                      "registrationVerificationToken": null,
+                      "registrationVerificationTokenExpiry": 1469708471749,
+                      "isValidated": false,
+                      "__v": 0,
+                      "consents": [],
+                      "clients": [],
+                      "accessToken": null,
+                      "userType": "shopper"
+                    }
+                  ]
+                }
+      
+  /{id}:
+    description: Read, Update and Delete users by their ID.
+    uriParameters:
+      id:
+        displayName: id
+        type: string
+        description: User's ID on database
+        example: 5750394d9b7b6d741edbcd29
+        required: true
+    get:
+      description: Get user information by their ID
+      headers:
+        authtoken:
+          displayName: token
+          type: string
+          description: Access token
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTQ1MjUwMjMsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNCUyMiU3RCJ9.KO6rC7g_maD4l7CwK2YzQvdnXEz_vi61n9Tm3XEtLAs
+          required: true
+      responses:
+        401:
+          body:
+            application/json:
+              example: |
+                {
+                  "metadata": {
+                    "status": "failure",
+                    "message": "invalid user acess token : eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTQ1MjUwMjMsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNCUyMiU3RCJ9.KO6rC7g_maD4l7CwK2YzQvdnXEz_vi61n9Tm3XEtLAs"
+                  },
+                  "data": null
+                }
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "metadata": {
+                    "status": "success",
+                    "message": null
+                  },
+                  "data": {
+                    "_id": "57e3e508aa3028465ca1c0bc",
+                    "username": "joao@test.com",
+                    "firstName": "Joao",
+                    "lastName": "Lastname",
+                    "organization": "An Institution",
+                    "jobTitle": "Academic Professional",
+                    "dob": "01-01-1981",
+                    "mobilePhone": "9541234567",
+                    "fax": "9547654321",
+                    "email": "joao@test.com",
+                    "address": {
+                      "addressLine1": "ABC Hotel",
+                      "addressLine2": "Suite 300",
+                      "city": "Miami",
+                      "state": "FL",
+                      "country": "USA",
+                      "zipCode": 33333
+                    },
+                    "credential": {
+                      "username": "joao@test.com",
+                      "password": "$2a$10$95TXm76Wtf1jj5cf2xwXnOR6v0ecmm20iPm9VPPczfN0DOAxlplgq"
+                    },
+                    "createdOn": 1474553096178,
+                    "displayName": "Joao Lastname",
+                    "registrationVerificationToken": null,
+                    "registrationVerificationTokenExpiry": 1474554896178,
+                    "isValidated": true,
+                    "__v": 0,
+                    "consents": [],
+                    "clients": [],
+                    "accessToken": [
+                      {
+                        "scope": "",
+                        "clientId": "%7B%22agent%22:%22Mozilla/5.0%20(Windows%20NT%2010.0;%20WOW64)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/53.0.2785.116%20Safari/537.36%22,%22ip%22:%22199.26.78.10,%2010.135.97.151%22%7D",
+                        "username": "joao@test.com",
+                        "expiry": 1474558418467,
+                        "idToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTY2MTg0NjcsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNTElMjIlN0QifQ.5ZRp_o1PV5eo6fdIvTZdxR8pfa8soA57ldRza9DEIh0",
+                        "type": "user-access-token",
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTY2MTg0NjcsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNTElMjIlN0QifQ.5ZRp_o1PV5eo6fdIvTZdxR8pfa8soA57ldRza9DEIh0"
+                      }
+                    ],
+                    "userType": "creator"
+                  }
+                }
+
+    put:
+      description: Update any and all user information with their ID.
+      headers:
+        authtoken:
+          displayName: token
+          type: string
+          description: Access token
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTQ1MjUwMjMsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNCUyMiU3RCJ9.KO6rC7g_maD4l7CwK2YzQvdnXEz_vi61n9Tm3XEtLAs
+          required: true
+      body:
+        application/json: 
+          example: |
+            {
+              "firstName": "NotJohn",
+              "myTestField": "myTestValue"
+            }
+        application/x-www-form-urlencoded:
+          formParameters:
+            anyFieldKeyAndValue:
+              displayName: Any Field Key And Value Here
+              type: string
+              description: This key will overwrite/update existing value or create a new field.
+              example: Name this parameter 'firstName' and value of 'NotJohn'
+              required: false
+      responses:
+        401:
+          body:
+            application/json:
+              example: |
+                {
+                  "metadata": {
+                    "status": "failure",
+                    "message": "invalid user acess token : eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTQ1MjUwMjMsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNCUyMiU3RCJ9.KO6rC7g_maD4l7CwK2YzQvdnXEz_vi61n9Tm3XEtLAs"
+                  },
+                  "data": null
+                }
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "metadata": {
+                    "status": "success",
+                    "message": null
+                  },
+                  "data": {
+                    "_id": "57e3e508aa3028465ca1c0bc",
+                    "username": "joao@test.com",
+                    "firstName": "NotJohn",
+                    "lastName": "Lastname",
+                    "organization": "An Institution",
+                    "jobTitle": "Academic Professional",
+                    "dob": "01-01-1981",
+                    "mobilePhone": "9541234567",
+                    "fax": "9547654321",
+                    "email": "joao@test.com",
+                    "address": {
+                      "addressLine1": "ABC Hotel",
+                      "addressLine2": "Suite 300",
+                      "city": "Miami",
+                      "state": "FL",
+                      "country": "USA",
+                      "zipCode": 33333
+                    },
+                    "credential": {
+                      "username": "joao@test.com",
+                      "password": "$2a$10$95TXm76Wtf1jj5cf2xwXnOR6v0ecmm20iPm9VPPczfN0DOAxlplgq"
+                    },
+                    "createdOn": 1474553096178,
+                    "displayName": "Joao Lastname",
+                    "registrationVerificationToken": null,
+                    "registrationVerificationTokenExpiry": 1474554896178,
+                    "isValidated": true,
+                    "__v": 0,
+                    "myTestField": "myTestValue",
+                    "firstname": "NotJohn",
+                    "consents": [],
+                    "clients": [],
+                    "accessToken": [
+                      {
+                        "scope": "",
+                        "clientId": "%7B%22agent%22:%22Mozilla/5.0%20(Windows%20NT%2010.0;%20WOW64)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/53.0.2785.116%20Safari/537.36%22,%22ip%22:%22199.26.78.10,%2010.135.97.151%22%7D",
+                        "username": "joao@test.com",
+                        "expiry": 1474558418467,
+                        "idToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTY2MTg0NjcsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNTElMjIlN0QifQ.5ZRp_o1PV5eo6fdIvTZdxR8pfa8soA57ldRza9DEIh0",
+                        "type": "user-access-token",
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTY2MTg0NjcsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNTElMjIlN0QifQ.5ZRp_o1PV5eo6fdIvTZdxR8pfa8soA57ldRza9DEIh0"
+                      }
+                    ],
+                    "userType": "creator"
+                  }
+                }
+
+    delete:
+      description: Delete user by their ID
+      headers:
+        authtoken:
+          displayName: token
+          type: string
+          description: Access token
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTQ1MjUwMjMsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNCUyMiU3RCJ9.KO6rC7g_maD4l7CwK2YzQvdnXEz_vi61n9Tm3XEtLAs
+          required: true
+      responses:
+        401:
+          body:
+            application/json:
+              example: |
+                {
+                  "metadata": {
+                    "status": "failure",
+                    "message": "invalid user acess token : eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvYW9AdGVzdC5jb20iLCJjcmVhdGVkT24iOjE0NzQ1NTQ1MjUwMjMsImNsaWVudCI6IiU3QiUyMmFnZW50JTIyOiUyMk1vemlsbGEvNS4wJTIwKFdpbmRvd3MlMjBOVCUyMDEwLjA7JTIwV09XNjQpJTIwQXBwbGVXZWJLaXQvNTM3LjM2JTIwKEtIVE1MLCUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUvNTMuMC4yNzg1LjExNiUyMFNhZmFyaS81MzcuMzYlMjIsJTIyaXAlMjI6JTIyMTk5LjI2Ljc4LjEwLCUyMDEwLjEzNS45Ny4xNCUyMiU3RCJ9.KO6rC7g_maD4l7CwK2YzQvdnXEz_vi61n9Tm3XEtLAs"
+                  },
+                  "data": null
+                }        
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "metadata": {
+                    "status": "success",
+                    "message": null
+                  },
+                  "data": {
+                    "_id": "57e3e508aa3028465ca1c0bc",
+                    "username": "joao@test.com",
+                    "firstName": "NotJohn",
+                    "lastName": "Lastname",
+                  }
+                }
