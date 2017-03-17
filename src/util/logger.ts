@@ -2,12 +2,13 @@
 
 import ApplicationConfig = require("../config/application-config");
 import winston = require('winston');
+import * as log4js from "log4js";
 var path = require('path');
 var fs = require('fs');
 
 export class Logger {
 
-    private logger : winston.LoggerInstance;
+    private logger : log4js.Logger;
 
     /**
      * Creates an instance of Logger.
@@ -17,8 +18,7 @@ export class Logger {
      * @memberOf Logger
      */
     constructor(fileName : string) { 
-        let filePath = path.join(__dirname, ApplicationConfig.LOGGER.filesPath);
-        console.log(filePath);
+        /*let filePath = path.join(__dirname, ApplicationConfig.LOGGER.filesPath);
         if (!fs.existsSync(filePath)) {
             fs.mkdirSync(filePath);
         }
@@ -28,8 +28,7 @@ export class Logger {
             transports: [
                 new (winston.transports.Console)({
                     label: fileName,
-                    timestamp: true,
-                    level: 'info'
+                    handleExceptions: true
                 }),
                 new (require('winston-daily-rotate-file'))({ 
                     label: fileName,
@@ -40,7 +39,26 @@ export class Logger {
                 })
             ],
             exitOnError: false,
-        });
+        });*/
+
+        /**
+         * make a log directory, just in case it isn't there.
+         */
+        try {
+            if (!fs.existsSync(ApplicationConfig.LOG_PATH)){
+                fs.mkdirSync(ApplicationConfig.LOG_PATH);
+                fs.mkdirSync(ApplicationConfig.APP_LOG_PATH);
+            } else if (!fs.existsSync(ApplicationConfig.APP_LOG_PATH)) {
+                fs.mkdirSync(ApplicationConfig.APP_LOG_PATH);
+            }
+        } catch (e) {
+            if (e.code != 'EEXIST') {
+                console.error("Could not set up log directory, error was: ", e);
+                process.exit(1);
+            }
+        }
+
+        this.logger = log4js.getLogger(fileName);
     }
 
     /**
@@ -52,7 +70,7 @@ export class Logger {
      * @memberOf Logger
      */
     debug(message : string, data? : any) : void {
-        this.logger.debug(message, data);
+        this.logger.debug(message, data === undefined ? "" : data);
     } 
 
     /**
@@ -64,6 +82,6 @@ export class Logger {
      * @memberOf Logger
      */
     error(message : string, err? : Error) : void {
-        this.logger.error(message, err);
+        this.logger.error(message, err === undefined ? "" : err);
     } 
 }

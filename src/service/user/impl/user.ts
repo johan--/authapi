@@ -2,6 +2,7 @@
 import * as Q from "q";
 import { Request} from "express";
 import { DaoFactory } from "../../../model/dao/factory";
+import { IDaoFactory } from "../../../model/dao/iDaoFactory";
 import { IUserDao } from "../../../model/dao/interface/user-dao";
 import { User } from "../../../model/entity/user";
 import { IUserService } from "../interface/user";
@@ -16,9 +17,23 @@ export class UserService implements IUserService {
     userDao : IUserDao;
     tokenManager : ITokenManager;
 
-    constructor(daoFactory: DaoFactory, tokenManager : ITokenManager) {
+    constructor(daoFactory: IDaoFactory, tokenManager : ITokenManager) {
+        log.debug("Intialized User Service : ");
         this.userDao = daoFactory.getUserDao();
         this.tokenManager = tokenManager;
+    }
+
+    /**
+     * 
+     * 
+     * @param {string} authToken
+     * @returns {Q.Promise<User>}
+     * 
+     * @memberOf UserService
+     */
+    getUserByAuthToken(authToken : string) : Q.Promise<User> {
+        log.debug("getUserByAuthToken");
+        return this.userDao.getUserByAuthToken(authToken);
     }
 
     /**

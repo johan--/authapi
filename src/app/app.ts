@@ -1,47 +1,77 @@
-require('newrelic');
-import express = require("express");
-import {Request, Response, Router} from "express";
-import session = require('express-session');
+'use strict'
 
-var cors = require('cors');
+if(process.env.NODE_ENV == 'prod') {
+    require('newrelic');
+}
 
-import log4js = require('log4js');
-import {Logger } from "log4js";
+import { Request, Response, Router } from "express";
+import * as express from "express";
+import * as session from "express-session";
+import * as passport from "passport";
+import * as bodyParser from "body-parser";
+import * as mongoose from "mongoose";
+import * as log4js from "log4js";
+import * as path from "path";
+import * as DbConfig from "db-config";
+import * as DbConnection from "db-connection";
 
-import UserRouter = require("../routes/user-router");
-import ClientRouter = require("../routes/client-router");
-import authRouter = require("../routes/auth-router");
+import { AuthRouter } from "../routes/auth-router";
+import { UserRouter } from "../routes/user-router";
+import { ClientRouter } from "../routes/client-router";
 
-// Import modules
-import passport = require("passport");
-import bodyParser = require("body-parser");
+import { AuthController } from "../controllers/impl/auth";
+import { IAuthController } from "../controllers/interface/auth";
+import { UserController } from "../controllers/impl/user";
+import { IUserController } from "../controllers/interface/user";
+import { ClientController } from "../controllers/impl/client";
+import { IClientController } from "../controllers/interface/client";
+
+import { AccessService } from "../service/access/impl/access";
+import { IAccessService } from "../service/access/interface/access";
+import { AuthService } from "../service/auth/impl/auth";
+import { IAuthService } from "../service/auth/interface/auth";
+import { ClientService } from "../service/client/impl/client";
+import { IClientService } from "../service/client/interface/client";
+import { EmailServiceFactory } from "../service/email/factory";
+import { IEmailService } from "../service/email/interface/email";
+import { OIDCService } from "../service/oidc/impl/oidc";
+import { IOIDCService } from "../service/oidc/interface/oidc";
+import { PassportService } from "../service/passport/passport";
+import { IPassportService } from "../service/passport/interface/passport";
+import { UserService } from "../service/user/impl/user";
+import { IUserService } from "../service/user/interface/user";
+
+import { ITokenManager } from "../token/interface/tokenmanager";
+import { TokenFactory, TokenManagerName } from "../token/factory";
+
+import { DaoFactory } from "../model/dao/factory";
+import { IDaoFactory } from "../model/dao/iDaoFactory";
+import { User } from "../model/entity/user";
+import { Logger } from '../util/logger';
+import { Helper } from '../util/helper';
+import { SessionManager, SessionKeys } from '../util/session';
 import ApplicationConfig = require("../config/application-config");
-import PassportAuthController = require("../controllers/passport/auth-controller-passport");
-import SimpleUserController = require("../controllers/simple-user-controller");
-import SimpleClientController = require("../controllers/simple-client-controller");
-import TokenManager = require('../token/tokenmanager-impl');
-import EmailServiceImpl = require('../email/email-service-impl');
-import PassportServiceImpl = require("../passport/passport-impl");
-import AccessTokenUtil = require("../passport/access-token-util");
-import SocialStrategyUtil = require("../passport/social-strategy-util");
-import IpStrategyUtil = require("../passport/ip-strategy-util");
+import fs = require('fs');
 
-import UserFactory = require("../util/userfactory");
-import mongoose = require("mongoose");
-import IUser = require("../model/entity/user");
-import MongoUserDao = require("../model/mongo/dao/user-dao-mongo");
-import MongoClientDao = require("../model/mongo/dao/client-dao-mongo");
-import MongoAccessDao = require("../model/mongo/dao/access-dao-mongo");
-import DbConfig = require("db-config");
-import DbConnection = require("db-connection");
-import path = require("path");
-import DaoFactory = require('../model/dao/dao-factory')
-
-let log: Logger = log4js.getLogger("app");
+let authRouter: AuthRouter;
 let userRouter: UserRouter;
 let clientRouter: ClientRouter;
 let connection: mongoose.Connection;
+var cors = require('cors');
 const app = express();
+const log = new Logger('App');
+
+const Log4jsConfig = require("../config/log4js");
+
+// Configure log4js, setting current working directory for writting log files
+log4js.configure(Log4jsConfig, {cwd: ApplicationConfig.APP_LOG_PATH});
+
+//Connect logger allows connect/express servers to log using log4js
+// automatic level detection to connect-logger, depends on http status response, compatible with express 3.x and 4.x
+app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
+
+//initialize new Relic
+
 /*app.use(cors(
 	{
 		origin : true,
@@ -58,7 +88,10 @@ startMongo();
 
 createAndStartServer();
 
-function createAndStartServer() {
+/**
+ * create and starts server
+ */
+function createAndStartServer() : void {
 	log.debug("Entering createAndStartServer()");
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(bodyParser.json());
@@ -80,8 +113,7 @@ function createAndStartServer() {
 	// app.use(express.static(__dirname + '/public'));
 
 	process.on('uncaughtException', function (err: any) {
-		console.log('Caught exception: ' + err, err.stack);
-
+		log.debug(err.message, err);
 	});
 
 	app.use(passport.initialize());
@@ -95,38 +127,48 @@ function createAndStartServer() {
 	});
 
 	app.listen(app.get('port'), function () {
-		console.log('Node app is running on port', app.get('port'));
+		log.debug('Node app is running on port', app.get('port'));
 	});
 }
 
-function setDependencies() {
+/**
+ * Sets dependencies
+ */
+function setDependencies() : void {
 	log.debug("setting dependencies");
-	connection= DbConnection.get("mongo", getDbConfiguration()).get();
-	DaoFactory.initializaMongoConnection(connection);
-	let userDao = DaoFactory.getUserDao();
-	let accessDao = DaoFactory.getAccessDao();
-	let clientDao = DaoFactory.getClientDao();
-	let tokenMan = new TokenManager();
-	let emailService = new EmailServiceImpl();
-	let userFactory = new UserFactory();
-	let passportService = new PassportServiceImpl(userDao, passport, tokenMan, new UserFactory(), clientDao);
-	let accessTokenUtil = new AccessTokenUtil(userDao, tokenMan, accessDao, userFactory, clientDao);
-	let socialStrategyUtil = new SocialStrategyUtil(userDao);
-	let ipStrategyUtil = new IpStrategyUtil(userDao);
-	let passportAuthController = new PassportAuthController(userDao, clientDao, tokenMan, emailService, passportService, passport, socialStrategyUtil, ipStrategyUtil, accessTokenUtil, accessDao);
-	authRouter.setAuthController(passportAuthController);
-	let userController = new SimpleUserController(userDao);
+	connection = DbConnection.get("mongo", getDbConfiguration()).get();
+	let daoFactory : IDaoFactory = new DaoFactory(connection);
+	let emailService : IEmailService = EmailServiceFactory.getEmailService();
+	let tokenManager : ITokenManager = TokenFactory.getTokenManager(TokenManagerName.JWT);
+	let passportService : IPassportService = new PassportService(passport, tokenManager, daoFactory);
+	let accessService : IAccessService = new AccessService(daoFactory, tokenManager);
+	let authService : IAuthService = new AuthService(emailService, accessService, daoFactory, tokenManager);
+	let clientService : IClientService = new ClientService(daoFactory);
+	let userService : IUserService = new UserService(daoFactory, tokenManager);
+	let oidcService : IOIDCService = new OIDCService(clientService, userService, accessService, passportService, daoFactory);
+
+	let authController : IAuthController = new AuthController(authService, oidcService, passport);
+	authRouter = new AuthRouter(authController);
+	let userController = new UserController(userService);
 	userRouter = new UserRouter(userController);
-	let clientController = new SimpleClientController(clientDao);
+	let clientController = new ClientController(clientService);
 	clientRouter = new ClientRouter(clientController);
-	setIntercepter(userDao);
+	setIntercepter(userService);
 }
 
+/**
+ * Get DB configuration
+ * 
+ * @returns {DbConfig.DbConfigInterface}
+ */
 function getDbConfiguration(): DbConfig.DbConfigInterface {
 	return DbConfig.get(ApplicationConfig.MONGO_DB_CONFIG);
 }
 
-function setRoutes() {
+/**
+ * Set routes
+ */
+function setRoutes() : void {
 	let baseUrl:string = '/auth';
 	app.get(baseUrl + "/", function (req: Request, res: Response) {
        res.status(200).header('Content-Type', 'application/json').send(JSON.stringify({
@@ -155,35 +197,45 @@ function setRoutes() {
 		}));
 	});
 }
-function setIntercepter(userDao: any) {
+
+/**
+ * Sets interceptors
+ * 
+ * @param {IAuthService} authService
+ */
+function setIntercepter(userService: IUserService) {
 	app.use(function (request: Request, response: any, next: any) {
-		log.debug("Request Headers", request.headers);
-		log.debug("Entering Intercepter, Session ? === ", request.session["userDetails"] ? true : false);
-		log.debug("Entering Intercepter, authtoken && authorization ", request.headers["authtoken"], request.headers['authorization']);
-		if (request.session["userDetails"]) {
-			request.authenticatedUser = request.session["userDetails"];
-			next();
-		} else {
-			let acessToken: string = null;
-			if (request.headers["authtoken"]) {
-				acessToken = request.headers["authtoken"];
-			} else if (request.headers['authorization'] && request.headers['authorization'].indexOf('Bearer ') > -1) {
-				acessToken = request.headers['authorization'].replace('Bearer', '').trim();
-			}
-			
-			if (acessToken) {
-				userDao.getUserByAuthToken(acessToken
-					, function (err: Error, user: IUser) {
-						if (user) {
-							request.authenticatedUser = user;
-						}
-						next();
-					});
-			} else {
-				log.debug("Intercepter Nothing found.");
+		log.debug("setIntercepter");
+		SessionManager.get(request, SessionKeys.User_Details) 
+		.then((user : User) => {
+			if(user) {
 				next();
+			} else {
+				let accessToken: string = Helper.getAuthorizationFromHeader(request);
+				
+				if (accessToken) {
+					userService.getUserByAuthToken(accessToken)
+					.then((user : User) => {
+						user.credential = null;
+						user.accessToken = null;
+						SessionManager.set(request, SessionKeys.User_Details, user)
+						.then((sessionUser : User) => { next(); })
+						.fail((err : Error) => { log.error("Failed to get user by authtoken", err); next(); }).done();
+					})
+					.fail((err : Error) => {
+						log.error("Issue with finding user by auth token", err);
+						next();
+					}).done();
+				} else {
+					log.debug("Intercepter Nothing found.");
+					next();	
+				}
 			}
-		}
+		})
+		.fail((err : Error) => {
+			log.error("Issue with finding user by auth token", err);
+			next();
+		});
 	});
 }
 
@@ -192,7 +244,7 @@ function startMongo() {
 	var dbConnection = mongoose.connection;
 	dbConnection.on('error', console.error.bind(console, 'connection error:'));
 	dbConnection.once('open', function callback () {
-    	 console.log('Connected To Mongo Database');
+    	 log.debug('Connected To Mongo Database');
 	});
 	*/
 }

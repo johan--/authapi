@@ -23,4 +23,7 @@ export interface IAuthController {
 	loginOrRegisterUserByLinkedin(request: Request, response: Response): void;
 	getGoogleLogin(request: Request, response: Response): void;
 	loginOrRegisterUserByGoogle(request: Request, response: Response): void;
+	token(request: Request, response: Response): void;
+	authorize(request: Request, response: Response): void;
+	consent(request: Request, response: Response): void;
 }

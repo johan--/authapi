@@ -26,56 +26,56 @@ describe("Sign up journey",function() {
 	        }; 
     });  	         
 
-    it('should throw 500 internal server error for invalid password format', function (done:any) {
+    it('should throw 404 internal server error for invalid password format', function (done:any) {
         profile.password = 'hhhhhh';      
         chai.request(app)
         .post('/auth/user/auth/signup')
         .send(profile)
         .end(function(err: Error, res: any){            
             var responseData : any = JSON.parse(res.text);
-            expect(res.status).to.equal(500);
+            expect(res.status).to.equal(404);
             expect(responseData.metadata.message.key).to.equal('PASSWORD');
             expect(responseData.metadata.message.value).to.equal('Password must be at least 8 characters long and include at least one of each of 0-9, a-z, A-Z and Symbol (e.g. ! # ? $).');
             done();
         });
     });
     
-    it('should throw 500 internal server error for missing password', function (done:any) {
+    it('should throw 404 internal server error for missing password', function (done:any) {
         profile.password = null;      
         chai.request(app)
         .post('/auth/user/auth/signup')
         .send(profile)
         .end(function(err:Error, res: any){  
             var responseData : any = JSON.parse(res.text);
-            expect(res.status).to.equal(500);
-            expect(responseData.metadata.message.message).to.equal('Missing credentials');
+            expect(res.status).to.equal(404);
+            expect(responseData.data.message).to.equal('Missing credentials');
             done();   
         });
     });
 
-     it('should throw 500 internal server error for invalid username(username should be email address format)', function (done:any) {
+     it('should throw 404 internal server error for invalid username(username should be email address format)', function (done:any) {
         profile.username = 'testuser';      
         chai.request(app)
         .post('/auth/user/auth/signup')
         .send(profile)
         .end(function(err:Error, res:any) {     
             var responseData : any = JSON.parse(res.text);
-            expect(res.status).to.equal(500);
+            expect(res.status).to.equal(404);
             expect(responseData.metadata.message.key).to.equal('EMAIL_ADDRESS');
             expect(responseData.metadata.message.value).to.equal('Invalid email address.');
             done();  
         });
     });
 
-    it('should throw 500 internal server error for missing username', function (done:any) {
+    it('should throw 404 internal server error for missing username', function (done:any) {
         profile.username = null;      
         chai.request(app)
         .post('/auth/user/auth/signup')
         .send(profile)
         .end(function(err:Error, res:any) {
             var responseData : any = JSON.parse(res.text);
-            expect(res.status).to.equal(500);
-            expect(responseData.metadata.message.message).to.equal('Missing credentials');
+            expect(res.status).to.equal(404);
+            expect(responseData.data.message).to.equal('Missing credentials');
             done();   
         });
     });
@@ -87,7 +87,7 @@ describe("Sign up journey",function() {
         .send(profile)
         .end(function(err:Error, res:any){
             var responseData : any = JSON.parse(res.text);
-            expect(res.status).to.equal(200);        
+            expect(res.status).to.equal(201);        
             expect(responseData.data.username).to.equal(profile.username);
             expect(responseData.data.firstName).to.equal(profile.firstName);
             expect(responseData.data.lastName).to.equal(profile.lastName);

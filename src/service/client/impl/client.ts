@@ -1,7 +1,7 @@
 'use strict'
 import * as Q from "q";
-import { Request} from "express";
 import { DaoFactory } from "../../../model/dao/factory";
+import { IDaoFactory } from "../../../model/dao/iDaoFactory";
 import { IClientDao } from "../../../model/dao/interface/client-dao";
 import { IUserDao } from "../../../model/dao/interface/user-dao";
 import { Client } from "../../../model/entity/client";
@@ -18,7 +18,8 @@ export class ClientService implements IClientService {
     clientDao : IClientDao;
     userDao : IUserDao
 
-    constructor(daoFactory: DaoFactory) {
+    constructor(daoFactory: IDaoFactory) {
+        log.debug("Intialized Client Service : ");
         this.clientDao = daoFactory.getClientDao();
         this.userDao = daoFactory.getUserDao();
     }
@@ -99,7 +100,7 @@ export class ClientService implements IClientService {
 	updateClientById(id: string, updatedInformation: any): Q.Promise<Client> {
 		log.debug("updateClientById : id : " + id, updatedInformation);
         let clientUpdateDiff : any = {};
-        if(updatedInformation.appName) { clientUpdateDiff.name = updatedInformation.appName; }
+        if(updatedInformation.name) { clientUpdateDiff.name = updatedInformation.name; }
         if(updatedInformation.redirect_uris) { clientUpdateDiff.redirect_uris = updatedInformation.redirect_uris; }
         return this.clientDao.updateClientById(id, clientUpdateDiff);
 	}
@@ -129,4 +130,31 @@ export class ClientService implements IClientService {
         .done();
         return deferred.promise;
 	}
+
+    /**
+     * 
+     * 
+     * @param {string} id
+     * @param {string} secret
+     * @returns {Q.Promise<Client>}
+     * 
+     * @memberOf ClientService
+     */
+    getClientByClientIdAndClientSecret(id: string, secret: string): Q.Promise<Client>{
+		log.debug("getClientByClientIdAndClientSecret : id : " + id);
+        return this.clientDao.getClientByClientIdAndSecret(id, secret);
+    }
+
+    /**
+     * 
+     * 
+     * @param {string} id
+     * @returns {Q.Promise<Client>}
+     * 
+     * @memberOf ClientService
+     */
+    getClientByClientId(id : string) : Q.Promise<Client>{
+		log.debug("getClientByClientId : id : " + id);
+        return this.clientDao.getClientByClientId(id);        
+    }
 }

@@ -17,13 +17,24 @@ export class UserController implements IUserController {
 	userService: IUserService;
 
 	constructor(userService: IUserService) {
+		log.debug("Intialized User Controller : ");
 		this.userService = userService;
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param {Request} request
+	 * @param {Response} response
+	 * 
+	 * @memberOf UserController
+	 */
 	self(request: Request, response: Response): void {
 		SessionManager.get(request, SessionKeys.User_Details)
 		.then((user : User) => {
 			if(user) {
+				user.credential = null;
+				user.accessToken = null;
 				AppResponse.success(response, user);
 			} else {
 				AppResponse.warn(response, "No user found.");
@@ -60,7 +71,7 @@ export class UserController implements IUserController {
 	 * @memberOf SimpleUserController
 	 */
 	getUserById(id: string, request: Request, response: Response): void {
-		log.debug("getUserById");
+		log.debug("getUserById : " + id);
 		this.userService.getUserById(id)
 		.then((user : User) => { AppResponse.success(response, user); })
 		.fail((err : Error) => { AppResponse.failure(response, err); })

@@ -3,11 +3,12 @@
  * @class AuthorizationCode
  */
 export class AuthorizationCode {
-    user: String;
-    client : String;
-    scope : Array<String>;
-    code : String;
-    redirectUri : String;
-    responseType : String;
-    status : String;
+    user: string;
+    client : string;
+    sub : string;
+    scope : Array<string>;
+    code : string;
+    redirectUri : string;
+    responseType : string;
+    status : string;
 }

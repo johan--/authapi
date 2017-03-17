@@ -56,15 +56,4 @@ export interface IClientController {
      * @memberOf IClientController
      */
     resetClientSecretById(id: string, request: Request, response: Response): void;
-  
-    /**
-     * 
-     * 
-     * @param {Request} req
-     * @param {Response} res
-     * @param {Function} next
-     * 
-     * @memberOf IClientController
-     */
-    checkUserSession(req:Request, res:Response, next : Function) : void;
 }

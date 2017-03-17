@@ -13,7 +13,7 @@ export class FacebookUtil implements IProfileTransform {
 	/**
 	 * @param {*} facebookProfile
 	 * @returns {User}
-	 * 
+	 *
 	 * @memberOf FacebookUtil
 	 */
     public createUserFromProfile(facebookProfile: any): User {
@@ -43,7 +43,8 @@ export class FacebookUtil implements IProfileTransform {
 			registrationVerificationToken: null,
 			registrationVerificationTokenExpiry: null,
 			consents : Array<Consent>(),
-    		clients : Array<Client>()
+    		clients : Array<Client>(),
+            organizationName : null
 		};
 		return member;
 	}

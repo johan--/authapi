@@ -1,11 +1,15 @@
 'use strict'
+
 import * as express from "express";
 import { Request, Response, Router } from "express";
 import { IClientController } from "../controllers/interface/client";
 import { SessionManager, SessionKeys } from "../util/session";
+import { Logger } from '../util/logger';
 
 let router: Router = express.Router();
 let clientController: IClientController;
+
+const log = new Logger('ClientRouter');
 
 export class ClientRouter {
 
@@ -14,15 +18,12 @@ export class ClientRouter {
     }
 
     constructor(clientControllerInstance : IClientController) {
+        log.debug("Intialized Client Router");
         clientController = clientControllerInstance;
 		this.init();
 	}
 
 	private init() {
-		
-        router.get("/",function (request: Request, response: Response){
-            response.render("appRegister");
-        });
 
         /**
          * @swagger
@@ -47,9 +48,10 @@ export class ClientRouter {
          */
 
         router.post("/",function (request: Request, response: Response){
+            log.debug("POST : /");
             clientController.addClient(request, response);
         });
-/**
+        /**
          * @swagger
          * "/client/{id}":
          *  put:
@@ -92,10 +94,12 @@ export class ClientRouter {
          *          description: create response 
          */
         router.delete("/:id",function (request: Request, response: Response){
+            log.debug("DELETE : /:id");
             clientController.removeClient(request.params.id, request, response);
         });
 
         router.put("/:id",function (request: Request, response: Response){
+            log.debug("PUT : /:id");
             clientController.updateClientById(request.params.id, request.body, request, response);
         });
         
@@ -121,6 +125,7 @@ export class ClientRouter {
          */
         
         router.put("/resetSecret/:id",function (request: Request, response: Response){
+            log.debug("PUT : /resetSecret/:id");
             clientController.resetClientSecretById(request.params.id, request, response);
         });
 
@@ -142,12 +147,8 @@ export class ClientRouter {
          */
 
         router.get("/list",function (request: Request, response: Response){
+            log.debug("GET : /list");
             clientController.getClientsByUsername(request, response);
-        });
-        
-        
-        router.use((req : Request, res : Response, next : Function) : void => {
-            clientController.checkUserSession(req , res , next );
-        });
+        });  
     }
 }

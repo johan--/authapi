@@ -38,7 +38,8 @@ export class LinkedinUtil implements IProfileTransform {
 			registrationVerificationToken: null,
 			registrationVerificationTokenExpiry: null,
 			consents : Array<Consent>(),
-    		clients : Array<Client>()
+    		clients : Array<Client>(),
+            organizationName : null
 		};
 		return member;
 	}

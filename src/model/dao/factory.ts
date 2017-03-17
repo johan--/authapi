@@ -12,8 +12,9 @@ import { AuthDaoMongoose } from "./impl/mongoDao/auth-dao-mongo";
 import { IConsentDao } from "./interface/consent-dao";
 import { ConsentDaoMongoose } from "./impl/mongoDao/consent-dao-mongo";
 import { Connection } from "mongoose";
+import { IDaoFactory } from "./iDaoFactory";
 
-export class DaoFactory {
+export class DaoFactory implements IDaoFactory {
     private userDao : IUserDao;
     private accessDao : IAccessDao;
     private refreshDao : IRefreshDao;

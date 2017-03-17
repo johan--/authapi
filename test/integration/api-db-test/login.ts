@@ -32,7 +32,8 @@ describe("Login user journey",function() {
         .send(profile)
         .end(function(err:Error, res:any){
             var responseData : any = JSON.parse(res.text);
-            expect(res.status).to.equal(200);        
+            console.log(JSON.stringify(responseData));
+            expect(res.status).to.equal(201);        
             expect(responseData.data.username).to.equal(profile.username);
             expect(responseData.data.firstName).to.equal(profile.firstName);
             expect(responseData.data.lastName).to.equal(profile.lastName);
@@ -70,7 +71,7 @@ describe("Login user journey",function() {
         .end(function(err:Error, res:any){
             var responseData : any = JSON.parse(res.text);
             expect(res.status).to.equal(404);
-            expect(responseData.metadata.message.message).to.equal('Missing credentials');
+            expect(responseData.data.message).to.equal('Missing credentials');
             done();       
         });
     });
@@ -97,7 +98,7 @@ describe("Login user journey",function() {
         .end(function(err:Error, res:any){
             var responseData : any = JSON.parse(res.text);
             expect(res.status).to.equal(404);
-            expect(responseData.metadata.message.message).to.equal('Missing credentials');
+            expect(responseData.data.message).to.equal('Missing credentials');
             done();       
         });
     });

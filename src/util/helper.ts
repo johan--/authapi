@@ -1,5 +1,5 @@
 'use strict'
-import express = require('express');
+
 import { Request, Response } from "express";
 import crypto = require("crypto");
 import { Logger } from './logger';
@@ -7,6 +7,41 @@ import { Logger } from './logger';
 const log = new Logger('util/helper');
 
 export class Helper {
+    /**
+     * 
+     * 
+     * @static
+     * @param {Request} request
+     * @returns {string}
+     * 
+     * @memberOf Helper
+     */
+    static getIdToken(request : Request) : string {
+        let idToken: string = request.headers['idtoken'] || request.body.idtoken;
+
+        return idToken;
+    }
+
+    /**
+     * 
+     * 
+     * @static
+     * @param {Request} request
+     * @returns {string}
+     * 
+     * @memberOf Helper
+     */
+    static getAuthorizationFromHeader(request : Request) : string {
+        let accessToken: string = null;
+        if (request.headers["authtoken"]) {
+            accessToken = request.headers["authtoken"];
+        } else if (request.headers['authorization'] && request.headers['authorization'].indexOf('Bearer ') > -1) {
+            accessToken = request.headers['authorization'].replace('Bearer', '').trim();
+        }
+
+        return accessToken;
+    }
+
     /**
      * validates password format
      * 

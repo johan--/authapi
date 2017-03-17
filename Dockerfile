@@ -9,7 +9,7 @@ RUN mkdir -p /home/auth-api/app
 
 RUN echo "$env";
 
-RUN if [ "$env" = 'prod' ]; then export NEW_RELIC_ENABLED=true; else export NEW_RELIC_ENABLED=false; fi
+VOLUME /var/log
 
 #Copy The Current Directory To This Directory
 COPY ./ /home/auth-api/app

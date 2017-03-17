@@ -2,6 +2,7 @@
 import * as Q from "q";
 import { Request, Response } from "express";
 import { DaoFactory } from "../../model/dao/factory";
+import { IDaoFactory } from "../../model/dao/iDaoFactory";
 import { IUserDao } from "../../model/dao/interface/user-dao";
 import { IClientDao } from "../../model/dao/interface/client-dao";
 import { IpStrategy } from "./ip-strategy";
@@ -26,7 +27,7 @@ export class LoginByIpCustomStrategy {
     clientDao : IClientDao;
     ipStrategy : IpStrategy;
 
-    constructor(passportInstance: any, daoFactory: DaoFactory) {
+    constructor(passportInstance: any, daoFactory: IDaoFactory) {
 
         this.passport = passportInstance;
         this.userDao = daoFactory.getUserDao();
@@ -51,6 +52,7 @@ export class LoginByIpCustomStrategy {
                 let clientId: string = request.headers['client_id'];
                 let clientSecret = request.headers['client_secret'];
                 log.debug("clientId: ", clientId);
+                let isError = false;
 
                 self.clientDao.getClientByClientId(clientId)
                 .then((client : Client) => {
@@ -62,14 +64,16 @@ export class LoginByIpCustomStrategy {
                         else {
                             log.debug("Client Secret is not verified");
                             done(new Error("clientSecret is not match."), null);
+                            isError = true;
                         }
                     } else {
                         log.debug("Client not found.");
                         done(new Error("Client not found."), null);
+                        isError = true;
                     }
                 })
-                .then((result : any) => { return self.onLoginByIpResponse(ipaddress, result.res, result.body); })
-                .then((user : User) => { done(null, user); })
+                .then((result : any) => { if (!isError) { return self.onLoginByIpResponse(ipaddress, result.res, result.body); } })
+                .then((user : User) => { if (!isError) { done(null, user); } })
                 .fail((err : Error) => { done(err, null); })
                 .done();
             }
@@ -79,13 +83,12 @@ export class LoginByIpCustomStrategy {
     /**
      * 
      * 
-     * @private
      * @param {string} ipaddress
      * @returns {Q.Promise<any>}
      * 
      * @memberOf LoginByIpCustomStrategy
      */
-    private getOrganizationDetails(ipaddress: string) : Q.Promise<any> {
+    getOrganizationDetails(ipaddress: string) : Q.Promise<any> {
         log.debug("getOrganizationDetails : ip : " + ipaddress);
         let deferred : Q.Deferred<any> = Q.defer();
         ajaxRequest(

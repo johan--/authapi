@@ -10,6 +10,10 @@ export class JWTManager implements ITokenManager {
 
     public secret = '14mS3cr3tK3y4ndH4sh3r@#$%$#@<<>>>>><<<<FISH';
 
+    constructor() {
+        
+    }
+
     /**
      * 
      * 
@@ -74,7 +78,7 @@ export class JWTManager implements ITokenManager {
      * 
      * @memberOf JWTManager
      */
-    authenticateJwtToken(username: string, token: string, secretKey : string) : Q.Promise<boolean> {
+    /*authenticateJwtToken(username: string, token: string, secretKey : string) : Q.Promise<boolean> {
         log.debug("authenticateJwtToken username submitted: " + username);
         let deferred : Q.Deferred<any> = Q.defer(); 
         let decoded :any = null;
@@ -95,5 +99,5 @@ export class JWTManager implements ITokenManager {
             deferred.reject(new Error("Failed to authenticate the token."));
         }
         return deferred.promise;
-    }
+    }*/
 }

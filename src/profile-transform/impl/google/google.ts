@@ -13,7 +13,7 @@ export class GoogleUtil implements IProfileTransform {
 	/**
 	 * @param {*} googleProfile
 	 * @returns {User}
-	 * 
+	 *
 	 * @memberOf GoogleUtil
 	 */
     public createUserFromProfile(googleProfile: any): User {
@@ -43,7 +43,8 @@ export class GoogleUtil implements IProfileTransform {
 			registrationVerificationToken: null,
 			registrationVerificationTokenExpiry: null,
 			consents : Array<Consent>(),
-    		clients : Array<Client>()
+    		clients : Array<Client>(),
+            organizationName : null
 		};
 		return member;
 	}

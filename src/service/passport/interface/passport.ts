@@ -1,3 +1,5 @@
+import { LoginByIpCustomStrategy } from "../loginbyip-custom-strategy";
+
 /**
  * 
  * 
@@ -5,5 +7,5 @@
  * @interface IPassportService
  */
 export interface IPassportService {
-    
+    loginByIpCustomStrategy : LoginByIpCustomStrategy;    
 }

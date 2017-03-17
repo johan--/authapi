@@ -68,11 +68,4 @@ config.REDIRECT = {
     identity_ui_base_url: 'https://accounts.taylorandfrancis.com/identity/'
 }
 
-config.LOGGER = {
-    filename: 'auth-api-logs',
-    logLevel: 'debug',
-    logJSONFormat: true,
-    filesPath: '../../logs/'
-}
-
 module.exports = config;

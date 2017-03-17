@@ -12,6 +12,7 @@ gulp.task('copyDbProp', function() {
     .pipe(gulp.dest('dist/config'));
 });
 
+
 gulp.task('copy-oidc', function() {
   console.log("Copy OIDC Files");
   gulp.src('src/openid-connect/**/*')
@@ -22,6 +23,12 @@ gulp.task('copy-swagger', function() {
   console.log("Copy swagger Files");
   gulp.src(['src/swagger/**/*.json','src/swagger/**/*.yaml'])
     .pipe(gulp.dest('dist/src/swagger'));
+});
+
+gulp.task('copy-log4js', function() {
+  console.log("Copy log4js File");
+  gulp.src(['src/config/log4js.json'])
+    .pipe(gulp.dest('dist/src/config'));
 });
 
 gulp.task('copy-static', function() {

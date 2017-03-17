@@ -8,6 +8,7 @@ import { User } from "../../../model/entity/user";
  * @interface IUserService
  */
 export interface IUserService {	
+	getUserByAuthToken(authToken : string) : Q.Promise<User>;
     listUser(): Q.Promise<Array<User>>;
 	getUserById(id: string): Q.Promise<User>;
 	updateUser(id: string, updatedInformation: any): Q.Promise<User>;

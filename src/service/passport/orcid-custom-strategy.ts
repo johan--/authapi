@@ -2,6 +2,7 @@
 import * as Q from "q";
 import { Request, Response } from "express";
 import { DaoFactory } from "../../model/dao/factory";
+import { IDaoFactory } from "../../model/dao/iDaoFactory";
 import { IUserDao } from "../../model/dao/interface/user-dao";
 import { SocialStrategy } from "./social-strategy";
 import { IProfileTransform } from "../../profile-transform/interface/profile-transform";
@@ -24,7 +25,7 @@ export class OrcidCustomStrategy {
     userDao: IUserDao;
     socialStrategy : SocialStrategy
 
-    constructor(passportInstance: any, daoFactory: DaoFactory) {
+    constructor(passportInstance: any, daoFactory: IDaoFactory) {
         this.socialStrategy = new SocialStrategy(daoFactory);
         this.passport = passportInstance;
         this.userDao = daoFactory.getUserDao();

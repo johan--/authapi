@@ -1,19 +1,16 @@
 'use strict'
+
+import { Request } from "express";
 import { Address } from "./address";
 import { Client } from "./client";
 import { Consent } from "./consent";
 import { ICredential } from "./credential";
 import { Helper } from "../../util/helper";
-
-import cryptoUtil = require('crypto');
-import { Request } from "express";
 import { Logger } from '../../util/logger';
-import { ITokenManager } from '../../token/tokenmanager';
-import { TokenManager } from '../../token/tokenmanager-impl';
+import { ITokenManager } from '../../token/interface/tokenmanager';
 import { EncryptionUtil } from "../../util/encryption";
 
-const log = new Logger('model/entity/helper/user-factory');
-const tokenManager : ITokenManager = new TokenManager();
+const log = new Logger('model/entity/User');
 
 /**
  * @export
@@ -43,15 +40,16 @@ export class User {
     accessToken: Array<any>;
     clients: Array<Client>;
     consents: Array<Consent>;
+    organizationName : string;
 
     /**
      * @static
      * @param {Request} request
      * @returns {User}
-     * 
+     *
      * @memberOf User
      */
-    static createUserFromRequest(request: Request): User {
+    static createUserFromRequest(request: Request, tokenManager : ITokenManager): User {
         log.debug('createUserFromRequest : request.body.username : ' + request.body.username.toLowerCase());
 		let rightNow: number = new Date().getTime();
 		let newExpirationTime: Number = Helper.getNewExpirationTime();
@@ -82,11 +80,27 @@ export class User {
 			},*/
             createdOn: rightNow,
 			displayName: request.body.firstName + " " + request.body.lastName,
-			registrationVerificationToken: tokenManager.generateRandomToken(),
+			registrationVerificationToken: User.generateRandomToken(),
 			registrationVerificationTokenExpiry : newExpirationTime,
-			isValidated: false
+			isValidated: false,
+            organizationName : request.body.organizationName
         };
 
 		return user;
+    }
+
+    /**
+     *
+     *
+     * @private
+     * @static
+     * @returns {string}
+     *
+     * @memberOf User
+     */
+    private static generateRandomToken() : string {
+        let token: string = Math.random().toString(36).substring(2, 10);
+
+        return token;
     }
 }

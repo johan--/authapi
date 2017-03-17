@@ -1,7 +1,6 @@
 'use strict'
 
 import * as Q from 'q';
-import { Request, Response } from "express";
 import { User } from "../../../model/entity/user";
 
 /**
@@ -12,7 +11,7 @@ export interface IAuthService {
     registerUser(user: User, info: any): Q.Promise<User>;
     verifyRegistration(username : string, registrationVerificationToken : string, userClientInfo : any) : Q.Promise<User>;
     loginUserByBasicCredential(user: User, info: any, userClientInfo : any) : Q.Promise<User>
-    loginByIp(ipuser : User) : Q.Promise<any>;
+    loginByIp(ipuser : User, userClientInfo : any) : Q.Promise<any>
     loginOrRegisterUserByOrcid(tnfClientId : string, userClientInfo : any, isAuthorizationFlow : boolean, err: Error, user: User, info: any): Q.Promise<any>;
     logoutUser(idToken: string) : Q.Promise<any>;
     generateForgotPasswordToken(username : string) : Q.Promise<any>;

@@ -17,7 +17,7 @@ exports.config = {
 		includeStackTrace: false,
 		defaultTimeoutInterval: 400000
 	},
-	directConnect: false,
+	directConnect: true,
 
 	onPrepare: function() {
 		browser.ignoreSynchronization = true;

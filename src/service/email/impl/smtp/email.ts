@@ -12,7 +12,7 @@ let EmailTemplate = require('email-templates').EmailTemplate;
 const log = new Logger('SMTPEmailService');
 
 var transporter = nodeMailer.createTransport(ApplicationConfig.SMTP_HOST);
-var templatesDir = path.resolve(__dirname, '../public', 'templates')
+var templatesDir = path.resolve(__dirname, '../../../../public', 'templates')
 
 export class SMTPEmailService implements IEmailService {
     /**

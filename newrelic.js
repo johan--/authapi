@@ -12,12 +12,12 @@ exports.config = {
    */
   app_name: "auth-user-api-v2",
 
-  agent_enabled : false,
+  agent_enabled : true,
   /**
    * Your New Relic license key.
    */
-  license_key: 'f4c2e18e2c267fe7f33fb9f2e09695b93aee11a2',
-  
+  license_key: '59a4e37f66a0668d20df5be312e88b20fa13558e',
+
   logging: {
     /**
      * Level at which to log. 'trace' is most useful to New Relic when diagnosing
@@ -40,7 +40,7 @@ exports.config = {
   transaction_events : {
     enabled : true
   },
-  
+
   slow_sql : {
     enabled : true
   },

@@ -1,7 +1,7 @@
 'use strict'
 import * as Q from "q";
-import { Request, Response } from "express";
 import { DaoFactory } from "../../../model/dao/factory";
+import { IDaoFactory } from "../../../model/dao/iDaoFactory";
 import { IUserDao } from "../../../model/dao/interface/user-dao";
 import { IAccessDao } from "../../../model/dao/interface/access-dao";
 import { IClientDao } from "../../../model/dao/interface/client-dao";
@@ -25,7 +25,6 @@ const log = new Logger('AuthService');
 
 export class AuthService implements IAuthService {
 
-	passport: any;
 	userDao: IUserDao;
 	clientDao: IClientDao;
 	accessDao: IAccessDao
@@ -35,8 +34,8 @@ export class AuthService implements IAuthService {
 	ipStrategy: IpStrategy;
 	socialStrategy: SocialStrategy;
 
-    constructor(passport: any, emailService: IEmailService, accessService: IAccessService, daoFactory: DaoFactory, tokenManager: ITokenManager) {
-		this.passport = passport;
+    constructor(emailService: IEmailService, accessService: IAccessService, daoFactory: IDaoFactory, tokenManager: ITokenManager) {
+		log.debug("Intialized Auth Service : ");
 		this.accessService = accessService;
 		this.emailService = emailService;
 		this.tokenManager = tokenManager;
@@ -72,7 +71,6 @@ export class AuthService implements IAuthService {
 		return deferred.promise;
 	}
 
-	//Update session----------------------------------------
 	/**
 	 * 
 	 * 
@@ -84,16 +82,16 @@ export class AuthService implements IAuthService {
 	 * @memberOf AuthService
 	 */
 	verifyRegistration(username : string, registrationVerificationToken : string, userClientInfo : any) : Q.Promise<User> {
-		log.debug("verifyRegistration: username : " + username + ", verifyT : " + registrationVerificationToken);
+		log.debug("verifyRegistration: username : " + username + ", registrationVerificationToken : " + registrationVerificationToken);
         let deferred : Q.Deferred<any> = Q.defer();
 
 		if ((username && username!== '' && username !== null) && (registrationVerificationToken && registrationVerificationToken !== '' && registrationVerificationToken !== null)) {
 			this.userDao.getUserByUserName(username.toLowerCase())
 			.then((user : User) => {
 				if(user) {
-					if (new Date().getTime() > user.registrationVerificationTokenExpiry) {						
+					if (new Date().getTime() > user.registrationVerificationTokenExpiry) {		
 						log.debug("verifyRegistration : Token expired")
-						deferred.reject({ status : 409, key: "VERIFICATION_CODE", value: "Verification code is incorrect." });
+						deferred.reject({ status : 409, key: "VERIFICATION_CODE", value: "Verification code is expired." });
 					} else if (user.registrationVerificationToken === registrationVerificationToken) {
 						this.userDao.updateUser(user.id, { registrationVerificationToken: null, isValidated: true })
 						.then((updatedUser : User) => { 
@@ -105,10 +103,13 @@ export class AuthService implements IAuthService {
 						})
 						.fail((err : Error) => { deferred.reject(err); })
         				.done();
+					} else {
+						log.debug("verifyRegistration : token mismatch");
+						deferred.reject({ status : 409, key: "VERIFICATION_CODE", value: "Verification code is incorrect." });
 					}
 				} else {
-					log.debug("verifyRegistration : token mismatch");
-					deferred.reject({ status : 409, key: "VERIFICATION_CODE", value: "Verification code is incorrect." });
+					log.debug("verifyRegistration : User not found.");
+					deferred.reject({ status : 404, key: "EMAIL_ADDRESS", value: "User not found." });
 				}
 			})
 			.fail((err : Error) => { deferred.reject(err); })
@@ -147,11 +148,12 @@ export class AuthService implements IAuthService {
 	 * 
 	 * 
 	 * @param {User} ipuser
+	 * @param {*} userClientInfo
 	 * @returns {Q.Promise<any>}
 	 * 
 	 * @memberOf AuthService
 	 */
-	loginByIp(ipuser : User) : Q.Promise<any> {
+	loginByIp(ipuser : User, userClientInfo : any) : Q.Promise<any> {
 		log.debug("loginByIp");
         let deferred : Q.Deferred<any> = Q.defer();
 		
@@ -162,13 +164,13 @@ export class AuthService implements IAuthService {
 			this.ipStrategy.registerOrLoginIpUser(ipuser)
 			.then((newUser : User) => {
 				if(newUser.isValidated) {
-					this.accessService.createUserAccessToken(newUser.username, newUser.userType, Helper.getUserClientInfo(request), newUser)
+					this.accessService.createUserAccessToken(newUser.username, newUser.userType, userClientInfo, newUser)
 					.then((userWithAccess : User) => {
 						deferred.resolve({ access_type : "allow", user : userWithAccess });
 					})
 					.fail((err : Error) => { deferred.reject(err); }).done();
 				} else {
-					deferred.reject(new Error("token is not valid."));
+					deferred.reject(new Error("user is not validated."));
 				}
 			})
 			.fail((err : Error) => { deferred.reject(err); }).done();
@@ -281,6 +283,8 @@ export class AuthService implements IAuthService {
 					deferred.resolve();
 				})
 				.fail((err : Error) => { deferred.reject(err); }).done();
+			} else {
+				deferred.reject({ status : 404, key: "EMAIL_ADDRESS", value: "Email address is not registered." });
 			}
 		})
 		.fail((err : Error) => { deferred.reject(err); }).done();
@@ -339,7 +343,7 @@ export class AuthService implements IAuthService {
 				let credential = <BasicCredential>user.credential;
 				if(credential.resetPasswordToken === resetPasswordToken) {
 					let isPasswordValid: boolean = Helper.validatePassword(newPassword);
-					console.log("isPasswordValid", isPasswordValid);
+					log.debug("isPasswordValid", isPasswordValid);
 					if(isPasswordValid) {
 						credential.password = EncryptionUtil.encrypt(newPassword);
 						credential.resetPasswordToken = null;
@@ -474,12 +478,12 @@ export class AuthService implements IAuthService {
 			 * Verify The Signature 
 			 */
 			let verifySignatureDeferred : Q.Deferred<any> = Q.defer();
-			let clientSecret : string = null;
+			let clientSecret : string = this.tokenManager.secret;
 			if(clientAndAccessInfo.client) {
 				log.debug("Verify The Signature. ClientId : " + clientAndAccessInfo.client.clientId);
 				clientSecret = clientAndAccessInfo.client.clientSecret;
 			}
-			this.tokenManager.decodeJwtToken(idToken, this.tokenManager.secret, true)
+			this.tokenManager.decodeJwtToken(idToken, clientSecret, true)
 			.then((decodedTok : string) => {  verifySignatureDeferred.resolve(clientAndAccessInfo); })
 			.fail((err : Error) => { verifySignatureDeferred.reject({ status : 401, key: "INVALID_SIGNATURE", value: err || "Could Not Match Token Signature" }); }).done();
 

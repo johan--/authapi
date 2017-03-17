@@ -10,15 +10,17 @@ export class IpDataTransformUtil implements IProfileTransform {
     /**
      * @param {*} profile
      * @returns {User}
-     * 
+     *
      * @memberOf IpDataTransformUtil
      */
     public createUserFromProfile(profile : any): User {
         let ipaddress : string = profile.ipAddress;
         let ipDetails : HTMLBodyElement = profile.ipDetails;
 
-        console.log("ipDetails", ipDetails);
+        log.debug("ipDetails", ipDetails);
         let jsonResponse = JSON.parse(ipDetails.toString());
+
+        console.log("Ip Details Are" + ipDetails);
 
         let user: User = {
                 userType: 'ip',
@@ -51,7 +53,8 @@ export class IpDataTransformUtil implements IProfileTransform {
                 },
 
                 consents : [],
-                clients : []
+                clients : [],
+                organizationName : jsonResponse.data.party_name
             }
         return user;
     }

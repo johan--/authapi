@@ -12,5 +12,5 @@ export interface ITokenManager {
 	generateRandomToken() : Q.Promise<string>;
 	createJwtToken(data : any, secretKey : string) : Q.Promise<string> ;
 	decodeJwtToken(token: string, secretKey : string, verifyToken : boolean) : Q.Promise<string>;
-	authenticateJwtToken(username: string, token: string, secretKey : string) : Q.Promise<boolean>;
+	//authenticateJwtToken(username: string, token: string, secretKey : string) : Q.Promise<boolean>;
 }

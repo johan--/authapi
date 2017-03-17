@@ -8,7 +8,7 @@ import { Helper } from "../../util/helper";
 import { AppResponse } from "../../util/response";
 import { DaoFactory } from "../../model/dao/factory";
 import { Logger } from '../../util/logger';
-import { SessionManager, SessionKeys } from '../../util/Session';
+import { SessionManager, SessionKeys } from '../../util/session';
 
 const log = new Logger('ClientController');
 
@@ -17,6 +17,7 @@ export class ClientController implements IClientController {
 	clientService: IClientService;
 
 	constructor(clientService: IClientService) {
+		log.debug("Intialized Client Controller");
 		this.clientService = clientService;
 	}
 
@@ -32,13 +33,13 @@ export class ClientController implements IClientController {
 		log.debug("addClient");
 		SessionManager.get(request, SessionKeys.User_Details)
 		.then((userDetails : any) => {
-			if (userDetails["username"]) {
+			if (userDetails && userDetails["username"]) {
 				let username : string = userDetails["username"];
 				let appName : string = request.body.appName;
 				let redirectURIs : Array<string> = request.body.redirect_uris;
 				log.debug("username : " + username + ", appName : " + appName + ", redirectURIs : " + JSON.stringify(redirectURIs));
 				this.clientService.addClient(username, appName, redirectURIs)
-				.then((client : Client) => { AppResponse.success(response, client); })
+				.then((client : Client) => { AppResponse.created(response, client); })
 				.fail((err : Error) => { AppResponse.failure(response, err); })
         		.done();
 			} else {
@@ -62,7 +63,7 @@ export class ClientController implements IClientController {
 		log.debug("removeClient");
 		SessionManager.get(request, SessionKeys.User_Details)
 		.then((userDetails : any) => {
-			if (userDetails["username"]) {
+			if (userDetails && userDetails["username"]) {
 				this.clientService.removeClient(id)
 				.then((client : any) => { AppResponse.success(response, client); })
 				.fail((err : Error) => { AppResponse.failure(response, err); })
@@ -87,7 +88,7 @@ export class ClientController implements IClientController {
 		log.debug("getClientsByUsername");
 		SessionManager.get(request, SessionKeys.User_Details)
 		.then((userDetails : any) => {
-			if (userDetails["username"]) {
+			if (userDetails && userDetails["username"]) {
 				let username : string = userDetails["username"];
 				this.clientService.getClientsByUsername(username)
 				.then((clients : Array<Client>) => { AppResponse.success(response, clients); })
@@ -115,7 +116,7 @@ export class ClientController implements IClientController {
 		log.debug("updateClientById");
 		SessionManager.get(request, SessionKeys.User_Details)
 		.then((userDetails : any) => {
-			if (userDetails["username"]) {
+			if (userDetails && userDetails["username"]) {
 				this.clientService.updateClientById(id, updatedInformation)
 				.then((client : Client) => { AppResponse.success(response, client); })
 				.fail((err : Error) => { AppResponse.failure(response, err); })
@@ -141,7 +142,7 @@ export class ClientController implements IClientController {
 		log.debug("updateClientById");
 		SessionManager.get(request, SessionKeys.User_Details)
 		.then((userDetails : any) => {
-			if (userDetails["username"]) {
+			if (userDetails && userDetails["username"]) {
 				this.clientService.resetClientSecretById(id)
 				.then((client : Client) => { AppResponse.success(response, client); })
 				.fail((err : Error) => { AppResponse.failure(response, err); })
@@ -152,18 +153,5 @@ export class ClientController implements IClientController {
 		})
 		.fail((err : Error) => { AppResponse.failure(response, err); })
         .done();
-	}
-
-	/**
-	 * 
-	 * 
-	 * @param {Request} req
-	 * @param {Response} res
-	 * @param {Function} next
-	 * 
-	 * @memberOf SimpleClientController
-	 */
-	checkUserSession(req : Request, res : Response, next : Function) : void {
-		//TODO Check If The User Is in Session And Then Only Proceed
 	}
 }

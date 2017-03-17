@@ -1,7 +1,9 @@
 'use strict'
+
 import * as Q from "q";
 import * as mongoose from "mongoose";
 import { DaoFactory } from "../../../model/dao/factory";
+import { IDaoFactory } from "../../../model/dao/iDaoFactory";
 import { IUserDao } from "../../../model/dao/interface/user-dao";
 import { IAccessDao } from "../../../model/dao/interface/access-dao";
 import { IClientDao } from "../../../model/dao/interface/client-dao";
@@ -23,7 +25,8 @@ export class AccessService implements IAccessService {
     clientDao: IClientDao;
     tokenManager : ITokenManager;
 
-    constructor(daoFactory: DaoFactory, tokenManager : ITokenManager) {
+    constructor(daoFactory: IDaoFactory, tokenManager : ITokenManager) {
+        log.debug("Intialized Access Service : ");
         this.tokenManager = tokenManager;
         this.userDao = daoFactory.getUserDao();
         this.accessDao = daoFactory.getAccessDao();
@@ -31,19 +34,31 @@ export class AccessService implements IAccessService {
     }
 
     /**
+     *
+     *
+     * @param {Access} access
+     * @returns {Q.Promise<Access>}
+     *
+     * @memberOf AccessService
+     */
+    insertAccessToken(access : Access) : Q.Promise<Access> {
+        return this.accessDao.insertToAccess(access);
+    }
+
+    /**
      * Create access token for user
-     * 
+     *
      * @param {string} username
      * @param {string} userType
      * @param {*} userClientInfo
      * @param {User} user
      * @returns {Q.Promise<any>}
-     * 
+     *
      * @memberOf AccessService
      */
     createUserAccessToken(username : string, userType : string, userClientInfo : any, user: User) : Q.Promise<User> {
         log.debug("createAccessToken : username : " + user.username);
-        let deferred : Q.Deferred<any> = Q.defer(); 
+        let deferred : Q.Deferred<any> = Q.defer();
         let removeCriteria = { user: new mongoose.mongo.ObjectId(user.id), expiresOn: { $lt: new Date().getTime() } }
 
         this.accessDao.removeAccess(removeCriteria)
@@ -57,24 +72,24 @@ export class AccessService implements IAccessService {
 
     /**
      * Create access token for user from client
-     * 
+     *
      * @param {string} username
      * @param {string} userType
      * @param {*} userClientInfo
      * @param {string} clientId
      * @param {User} user
      * @returns {Q.Promise<any>}
-     * 
+     *
      * @memberOf AccessService
      */
     createUserAccessTokenForClient(username : string, userType : string, userClientInfo : any, clientId : string, user: User) : Q.Promise<User> {
         log.debug("createAccessToken : username : " + user.username);
-        let deferred : Q.Deferred<any> = Q.defer(); 
+        let deferred : Q.Deferred<any> = Q.defer();
         let removeCriteria = { user: new mongoose.mongo.ObjectId(user.id), expiresOn: { $lt: new Date().getTime() } }
 
         this.accessDao.removeAccess(removeCriteria)
         .then(() => { return this.clientDao.getClientByClientId(clientId); })
-        .then((client : Client) => { 
+        .then((client : Client) => {
             let clientObjId = new mongoose.mongo.ObjectId((<any>client).id);
             return this.createAndInsertToAccess(username, userType, userClientInfo, clientObjId, user)
          })
@@ -85,25 +100,27 @@ export class AccessService implements IAccessService {
         return deferred.promise;
     }
 
-   
+
     /**
      * create and insert to access
-     * 
+     *
      * @param {string} username
      * @param {string} userType
      * @param {*} userClientInfo
      * @param {*} client
      * @param {User} user
      * @returns {Q.Promise<any>}
-     * 
+     *
      * @memberOf AccessService
      */
     private createAndInsertToAccess(username : string, userType : string, userClientInfo : any, client: any, user: User) : Q.Promise<any> {
-        let deferred : Q.Deferred<any> = Q.defer(); 
-        let access : Access = Access.createAccessData(username, userType, userClientInfo, client, user, null);
+        let deferred : Q.Deferred<any> = Q.defer();
 
-        access.auth = null;
-        this.accessDao.insertToAccess(access)
+        Access.createAccessData(username, userType, userClientInfo, client, user, null)
+        .then((access : Access) => {
+            access.auth = null;
+            return this.accessDao.insertToAccess(access);
+        })
         .then((newAccess : Access) => {
             let accesstoken: any = {};
             accesstoken.token = newAccess.token;
@@ -111,7 +128,9 @@ export class AccessService implements IAccessService {
             user.accessToken.push(accesstoken);
             deferred.resolve(user);
         })
-        .fail((err : Error) => { deferred.reject(err); })
+        .fail((err : Error) => {
+            deferred.reject(err);
+        })
         .done();
 
         return deferred.promise;
@@ -147,12 +166,12 @@ export class AccessService implements IAccessService {
                         value['expiry'] = newExpirationTime;
                         accessTokenToAdd = value;
                     } else {
-                        console.log("keeping existing token as not expired")
+                        log.debug("keeping existing token as not expired")
                         updatedAccessTokens.push(value);
                     }
 
                 } else {
-                    console.log("removing existing token as expired")
+                    log.debug("removing existing token as expired")
                 }
             });
         }

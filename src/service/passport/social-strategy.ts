@@ -1,6 +1,7 @@
 'use strict'
 import * as Q from "q";
 import { DaoFactory } from "../../model/dao/factory";
+import { IDaoFactory } from "../../model/dao/iDaoFactory";
 import { IUserDao } from "../../model/dao/interface/user-dao";
 import { User } from "../../model/entity/user";
 import { Logger } from "../../util/logger";
@@ -12,7 +13,7 @@ export class SocialStrategy {
     userDao: IUserDao;
     user: User;
 
-    constructor(daoFactory: DaoFactory) {
+    constructor(daoFactory: IDaoFactory) {
         this.userDao = daoFactory.getUserDao();
     }
 

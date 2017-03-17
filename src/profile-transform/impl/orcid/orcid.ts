@@ -15,11 +15,11 @@ const log = new Logger('OrcidDataTransformUtil');
 export class OrcidDataTransformUtil implements IProfileTransform {
     /**
      * Create user from orcid profile
-     * 
+     *
      * @static
      * @param {*} orcidProfile
      * @returns {User}
-     * 
+     *
      * @memberOf OrcidDataTransformUtil
      */
     public createUserFromProfile(orcidProfile: any): User {
@@ -75,6 +75,7 @@ export class OrcidDataTransformUtil implements IProfileTransform {
             authorInstitution: [],
             fundings: [],
             coAuthors: [],
+            organizationName : null
         };
 
         if(parsedProfile['orcid-profile']['orcid-bio']['personal-details']['given-names']){
@@ -117,11 +118,11 @@ export class OrcidDataTransformUtil implements IProfileTransform {
 
     /**
      * Get co authors
-     * 
+     *
      * @static
      * @param {*} activities
      * @returns {Array<Object>}
-     * 
+     *
      * @memberOf OrcidDataTransformUtil
      */
     public static getCoAuthors(activities: any): Array<Object> {
@@ -135,13 +136,13 @@ export class OrcidDataTransformUtil implements IProfileTransform {
                         let coAuthor:any = {};
                         coAuthors.push(coAuthor);
 
-                        let orcidContributor = contributor["contributor-orcid"];                        
+                        let orcidContributor = contributor["contributor-orcid"];
                         if(orcidContributor){
                             let contributorOrcidUrl:string = orcidContributor["uri"];
                             let coAuthorId = contributorOrcidUrl.substring(contributorOrcidUrl.lastIndexOf("/")+1);
                             coAuthor.orcidId = coAuthorId;
-                        }                      
-                        
+                        }
+
                         if(contributor["credit-name"]){
                             coAuthor.name = contributor["credit-name"]["value"];
                         }
@@ -160,11 +161,11 @@ export class OrcidDataTransformUtil implements IProfileTransform {
 
     /**
      * Get funding
-     * 
+     *
      * @static
      * @param {*} activities
      * @returns {Array<Funding>}
-     * 
+     *
      * @memberOf OrcidDataTransformUtil
      */
     public static getFundings(activities: any): Array<Funding> {
@@ -179,11 +180,11 @@ export class OrcidDataTransformUtil implements IProfileTransform {
 
     /**
      * create funding
-     * 
+     *
      * @static
      * @param {*} orcidFunding
      * @returns {Funding}
-     * 
+     *
      * @memberOf OrcidDataTransformUtil
      */
     public static createFunding(orcidFunding: any): Funding {
@@ -222,11 +223,11 @@ export class OrcidDataTransformUtil implements IProfileTransform {
 
     /**
      * Get grant number
-     * 
+     *
      * @static
      * @param {*} orcidFundingIdentifier
      * @returns {Number}
-     * 
+     *
      * @memberOf OrcidDataTransformUtil
      */
     public static getGrantNumber(orcidFundingIdentifier: any): Number {
@@ -243,11 +244,11 @@ export class OrcidDataTransformUtil implements IProfileTransform {
 
     /**
      * format date
-     * 
+     *
      * @static
      * @param {*} orcidDate
      * @returns {String}
-     * 
+     *
      * @memberOf OrcidDataTransformUtil
      */
     public static formatDate(orcidDate: any): String {
@@ -260,11 +261,11 @@ export class OrcidDataTransformUtil implements IProfileTransform {
 
     /**
      * Get author institution
-     * 
+     *
      * @static
      * @param {*} activities
      * @returns {Array<Institution>}
-     * 
+     *
      * @memberOf OrcidDataTransformUtil
      */
     public static getAuthorInstitutions(activities: any): Array<Institution> {
@@ -281,11 +282,11 @@ export class OrcidDataTransformUtil implements IProfileTransform {
 
     /**
      * create institution
-     * 
+     *
      * @static
      * @param {*} employmentAffiliation
      * @returns {Institution}
-     * 
+     *
      * @memberOf OrcidDataTransformUtil
      */
     public static createInstitution(employmentAffiliation: any): Institution {
@@ -317,11 +318,11 @@ export class OrcidDataTransformUtil implements IProfileTransform {
 
     /**
      * get other names
-     * 
+     *
      * @static
      * @param {*} otherNamesForUser
      * @returns {Array<string>}
-     * 
+     *
      * @memberOf OrcidDataTransformUtil
      */
     public static getOtherNames(otherNamesForUser: any): Array<string> {

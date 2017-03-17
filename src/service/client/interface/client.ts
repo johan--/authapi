@@ -13,4 +13,6 @@ export interface IClientService {
     getClientsByUsername(username : string): Q.Promise<Array<Client>>;
     updateClientById(id: string, updatedInformation: any): Q.Promise<Client>;
     resetClientSecretById(id: string): Q.Promise<Client>;
+    getClientByClientIdAndClientSecret(id: string, secret: string): Q.Promise<Client>;
+    getClientByClientId(id : string) : Q.Promise<Client>;
 }

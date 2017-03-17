@@ -27,7 +27,7 @@ export class RefreshDaoMongoose implements IRefreshDao {
      * @memberOf RefreshDaoMongoose
      */
     createRefreshToken(refresh: RefreshToken): Q.Promise<any> {
-        log.debug("createRefreshToken: for auth : " + refresh.authorizationCode);
+        log.debug("createRefreshToken: for auth : " + refresh.auth);
         let deferred : Q.Deferred<any> = Q.defer(); 
         try {
             this.RefreshModel.create(refresh, (error: any, refresh: RefreshToken) => {

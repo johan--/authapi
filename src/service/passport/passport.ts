@@ -9,6 +9,7 @@ import { User } from "../../model/entity/user";
 import { AccessToken } from "../../model/entity/access-token";
 import { BasicCredential } from "../../model/entity/basic-credential";
 import { DaoFactory } from "../../model/dao/factory";
+import { IDaoFactory } from "../../model/dao/iDaoFactory";
 import { IUserDao } from "../../model/dao/interface/user-dao";
 import { IClientDao } from "../../model/dao/interface/client-dao";
 import { IProfileTransform } from "../../profile-transform/interface/profile-transform";
@@ -16,6 +17,7 @@ import { ProfileTransformFactory, ProfileName } from "../../profile-transform/fa
 import { Logger } from "../../util/logger";
 import { Helper } from "../../util/helper";
 import { EncryptionUtil } from "../../util/encryption";
+import { ITokenManager } from "../../token/interface/tokenmanager";
 import ApplicationConfig = require("../../config/application-config");
 
 let LocalStrategy = require("passport-local").Strategy;
@@ -26,22 +28,19 @@ var GoogleStrategy = require("passport-google-oauth2");
 
 const log = new Logger('PassportService');
 
-class PassportService implements IPassportService {
+export class PassportService implements IPassportService {
 
 	userDao: IUserDao;
-	passport: any;
 	socialStrategyUtil : SocialStrategy;
 	clientDao : IClientDao;
-	daoFactory: DaoFactory;
+	loginByIpCustomStrategy : LoginByIpCustomStrategy;
 
-	constructor(passportInstance: any, daoFactory: DaoFactory) {
-		this.passport = passportInstance;
+	constructor(public passport : any, public tokenManager : ITokenManager, public daoFactory: IDaoFactory) {
 		this.userDao = daoFactory.getUserDao();
 		this.clientDao = daoFactory.getClientDao();
 		this.initializePassportSettings();
 		this.initializeStrategies();
 		this.socialStrategyUtil = new SocialStrategy(daoFactory);
-		this.daoFactory = daoFactory;
 	}
 
 	/**
@@ -76,10 +75,10 @@ class PassportService implements IPassportService {
 	 * @memberOf PassportService
 	 */
 	private initializeStrategies() {
-		console.log("initializeStrategies");
+		log.debug("initializeStrategies");
 		this.createLocalStrategy();
 		new OrcidCustomStrategy(this.passport, this.daoFactory);
-		new LoginByIpCustomStrategy(this.passport, this.daoFactory);
+		this.loginByIpCustomStrategy = new LoginByIpCustomStrategy(this.passport, this.daoFactory);
 		this.createFacebookStrategy();
 		this.createTwitterStrategy();
 		this.createLinkedinStrategy();
@@ -94,7 +93,7 @@ class PassportService implements IPassportService {
 	 * @memberOf PassportService
 	 */
 	private createGoogleStrategy() {
-		console.log("createGoogleStrategy");
+		log.debug("createGoogleStrategy");
 		this.passport.use(new GoogleStrategy(ApplicationConfig.GOOGLE_CONFIG,
 			function(accessToken:any, refreshToken:any, googleProfile:any, cb:any) {			
 				let profileTransform : IProfileTransform = ProfileTransformFactory.getProfileTransformUtil(ProfileName.google);
@@ -113,7 +112,7 @@ class PassportService implements IPassportService {
 	 * @memberOf PassportService
 	 */
 	private createLinkedinStrategy() {
-		console.log("createLinkedinStrategy");
+		log.debug("createLinkedinStrategy");
 		this.passport.use(new LinkedinStrategy(ApplicationConfig.LINKEDIN_CONFIG,
 			function(accessToken:any, refreshToken:any, linkedinProfile:any, cb:any) {
 				let profileTransform : IProfileTransform = ProfileTransformFactory.getProfileTransformUtil(ProfileName.linkedin);
@@ -133,7 +132,7 @@ class PassportService implements IPassportService {
 	 * @memberOf PassportService
 	 */
 	private createFacebookStrategy() {
-		console.log("createFacebookStrategy");
+		log.debug("createFacebookStrategy");
 		this.passport.use(new FacebookStrategy(ApplicationConfig.FACEBOOK_CONFIG,
 			function(accessToken:any, refreshToken:any, fbProfile:any, cb:any) {
 				let profileTransform : IProfileTransform = ProfileTransformFactory.getProfileTransformUtil(ProfileName.facebook);
@@ -153,7 +152,7 @@ class PassportService implements IPassportService {
 	 * @memberOf PassportService
 	 */
 	private createTwitterStrategy() {
-		console.log("createTwitterStrategy");
+		log.debug("createTwitterStrategy");
 		this.passport.use(new TwitterStrategy(ApplicationConfig.TWITTER_CONFIG,
 			function(accessToken:any, tokenSecret:any, twitterProfile:any, cb:any) {
 				let profileTransform : IProfileTransform = ProfileTransformFactory.getProfileTransformUtil(ProfileName.twitter);
@@ -176,7 +175,7 @@ class PassportService implements IPassportService {
 		log.debug("initializing Local Strategy");
 		let self = this;
 		this.passport.use("local-login", new LocalStrategy({ usernameField: "username", passwordField: "password", passReqToCallback: true },
-			function (req: Request, username: String, password: String, done: any) {
+			function (req: Request, username: string, password: string, done: any) {
 				process.nextTick(function () {
 					self.userDao.getUserByUserName(username.toLowerCase())
 					.then((user : User) => {
@@ -212,7 +211,7 @@ class PassportService implements IPassportService {
 						if (user) {
 							done(null, false, { key: "EMAIL_ADDRESS", value: "Email address is already registered." });
 						} else {
-							let userInput: User = User.createUserFromRequest(req);
+							let userInput: User = User.createUserFromRequest(req, self.tokenManager);
 							self.userDao.createUser(userInput)
 							.then((newuser : User) => { done(null, newuser); })
 						}

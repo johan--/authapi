@@ -71,11 +71,4 @@ config.REDIRECT = {
     identity_ui_base_url: 'http://localhost:3001/'
 }
 
-config.LOGGER = {
-    filename: 'auth-api-logs',
-    logLevel: 'debug',
-    logJSONFormat: true,
-    filesPath: '../../logs/'
-}
-
 module.exports = config;

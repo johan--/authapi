@@ -1,18 +1,20 @@
 'use strict'
-import MongoUserDao = require("../../../../src/model/mongo/dao/user-dao-mongo");
-import MongoAuthDao = require("../../../../src/model/mongo/dao/auth-dao-mongo");
-import MongoConcentDao = require("../../../../src/model/mongo/dao/consent-dao-mongo");
-import MongoClientDao = require("../../../../src/model/mongo/dao/client-dao-mongo");
-import EncryptionUtil = require("../../../../src/util/encryption-util");
-import Helper = require("../../../../src/util/helper");
-import ITokenManager = require('../../../../src/token/tokenmanager-impl');
-import IUser = require("../../../../src/model/entity/user");
+import { UserDaoMongoose } from "../../../../src/model/dao/impl/mongoDao/user-dao-mongo";
+import { AuthDaoMongoose } from "../../../../src/model/dao/impl/mongoDao/auth-dao-mongo";
+import { ConsentDaoMongoose } from "../../../../src/model/dao/impl/mongoDao/consent-dao-mongo";
+import { ClientDaoMongoose } from "../../../../src/model/dao/impl/mongoDao/client-dao-mongo";
+import { EncryptionUtil } from "../../../../src/util/encryption";
+import { Helper } from "../../../../src/util/helper";
+import { TokenFactory, TokenManagerName } from '../../../../src/token/factory';
+import { ITokenManager } from '../../../../src/token/interface/tokenmanager';
+import { User } from "../../../../src/model/entity/user";
+import { Client } from "../../../../src/model/entity/client";
 import IClient = require("../../../../src/model/entity/client");
 
 import DbConfig = require("db-config");
 import DbConnection = require("db-connection");
 import mongoose = require("mongoose");
-import DaoFactory = require('../../../../src/model/dao/dao-factory');
+import { DaoFactory } from '../../../../src/model/dao/factory';
 import ApplicationConfig = require("../../../../src/config/application-config");
 
 let connection: mongoose.Connection;
@@ -22,10 +24,10 @@ var ObjectID = require("mongodb").ObjectID;
 export class DBUtility {
 
     tokenManager : ITokenManager;
-    userDao : MongoUserDao;
-    authDao : MongoAuthDao;       
-    consentDao : MongoConcentDao;     
-    clientDao : MongoClientDao;  
+    userDao : UserDaoMongoose;
+    authDao : AuthDaoMongoose;       
+    consentDao : ConsentDaoMongoose;     
+    clientDao : ClientDaoMongoose;  
 
     userModel : any;
     accessModel : any; 
@@ -35,13 +37,13 @@ export class DBUtility {
 
     constructor() {
         connection= DbConnection.get("mongo", DbConfig.get(ApplicationConfig.MONGO_DB_CONFIG)).get();
-        DaoFactory.initializaMongoConnection(connection);
+        let daoFactory = new DaoFactory(connection);
 
-        this.tokenManager = new ITokenManager();
-        this.userDao = <MongoUserDao>DaoFactory.getUserDao();
-        this.authDao = <MongoAuthDao>DaoFactory.getAuthDao();
-        this.consentDao = <MongoConcentDao>DaoFactory.getConsentDao();
-        this.clientDao = <MongoClientDao>DaoFactory.getClientDao();
+        this.tokenManager = TokenFactory.getTokenManager(TokenManagerName.JWT);
+        this.userDao = <UserDaoMongoose>daoFactory.getUserDao();
+        this.authDao = <AuthDaoMongoose>daoFactory.getAuthDao();
+        this.consentDao = <ConsentDaoMongoose>daoFactory.getConsentDao();
+        this.clientDao = <ClientDaoMongoose>daoFactory.getClientDao();
 
         this.userModel = this.userDao.UserModel;
         this.accessModel = this.userDao.AccessModel;
@@ -52,16 +54,12 @@ export class DBUtility {
 
     createUser(user: any) : Q.Promise<any> {
         let deferred : Q.Deferred<any> = Q.defer();  
-        var userObject = this.getUserMongoObject(user);
+        this.getUserMongoObject(user)
+        .then((userObj : User) => { return this.userDao.createUser(user); })
+        .then((createdUser : User) => { deferred.resolve(createdUser); })
+        .fail((err : Error) => { deferred.reject(err); })
 
-        this.userDao.createUser(userObject, (err : Error, user : IUser) => {
-            if(err) {
-                deferred.reject(err);
-            } else {
-                deferred.resolve(user);
-            }
-        });
-        return deferred.promise;   
+        return deferred.promise;      
     }
 
     RemoveAuthorizeSuiteRecords(username: string) : Q.Promise<any> {
@@ -77,7 +75,6 @@ export class DBUtility {
     }
 
     createClient(clientDetails : any) : Q.Promise<any> {
-        let deferred : Q.Deferred<any> = Q.defer();
         let client = {
             id: "",
             username: clientDetails.username,
@@ -90,14 +87,7 @@ export class DBUtility {
 
         client.clientId = Helper.generateClientId(client.name);
         client.clientSecret = Helper.generateClientSecret(client.clientId, client.name);
-        this.clientDao.addClient(client, function (err: any, client: IClient) {
-            if (err) {
-                deferred.reject(err);
-            } else {
-                deferred.resolve(client);
-            }
-        });
-        return deferred.promise;
+        return this.clientDao.addClient(client);
     }
 
     removeClient(username : any) : Q.Promise<any> {
@@ -125,7 +115,7 @@ export class DBUtility {
         return userDeferred.promise;
     }
 
-    private removeUserModel(user : IUser) : Q.Promise<any> {
+    private removeUserModel(user : User) : Q.Promise<any> {
         let userDeferred : Q.Deferred<any> = Q.defer();
         this.userModel.remove({ username : user.username }, function(err:Error) {
             if(err) { 
@@ -138,7 +128,7 @@ export class DBUtility {
         return userDeferred.promise;
     }
 
-    private removeConsentModel(user : IUser) : Q.Promise<any> {
+    private removeConsentModel(user : User) : Q.Promise<any> {
         let consentDeferred : Q.Deferred<any> = Q.defer();
         this.consentModel.remove({ user : (<any>user)._id }, function(err:Error) {
             if(err) { 
@@ -151,7 +141,7 @@ export class DBUtility {
         return consentDeferred.promise;
     }
 
-    private removeAuthModel(user : IUser) : Q.Promise<any> {
+    private removeAuthModel(user : User) : Q.Promise<any> {
         let authDeferred : Q.Deferred<any> = Q.defer();
         this.authModel.remove({ user : (<any>user)._id }, function(err:Error) {
             if(err) { 
@@ -164,7 +154,7 @@ export class DBUtility {
         return authDeferred.promise;
     }
 
-    private removeAccessModel(user : IUser) : Q.Promise<any> {
+    private removeAccessModel(user : User) : Q.Promise<any> {
         let accessDeferred : Q.Deferred<any> = Q.defer();
         this.accessModel.remove({ user : (<any>user)._id }, function(err:Error) {
             if(err) { 
@@ -177,31 +167,38 @@ export class DBUtility {
         return accessDeferred.promise;
     }
 
-    private getUserMongoObject(user : any) : any {
+    private getUserMongoObject(user : any) : Q.Promise<any> {
+        let deferred : Q.Deferred<any> = Q.defer();
         let rightNow: number = new Date().getTime();
 		let newExpirationTime: Number = Helper.getNewExpirationTime();   
         let clientInfo: string = '%7B%22agent%22:%22Mozilla/5.0%20(Windows%20NT%2010.0;%20Win64;%20x64)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/53.0.2785.143%20Safari/537.36%22,%22ip%22:%22182.74.16.174,%2010.136.97.61%22%7D';
-        let userResultant: any = {
-            userType: user.userType,
-			username: user.username,
-			firstName: user.firstName,
-			lastName: user.lastName,
-            credential: {
-                username: user.username,
-                password: EncryptionUtil.encrypt(user.password)
-            },
-			accessToken: {
-				clientId: clientInfo,
-				username: user.username,
-				expiry: newExpirationTime,
-				token: this.tokenManager.createJwtToken(user.username, user.userType, rightNow, clientInfo)
-			},
-            createdOn: rightNow,
-			displayName: user.firstName + " " + user.lastName,
-			registrationVerificationToken: null,
-			isValidated: true
-        };
 
-		return userResultant;
+        this.tokenManager.createJwtToken({ username : user.username, userType : user.userType, time : rightNow, clientInfo : clientInfo }, this.tokenManager.secret)
+        .then((genToken : string) => {
+            let userResultant: any = {
+                userType: user.userType,
+                username: user.username,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                credential: {
+                    username: user.username,
+                    password: EncryptionUtil.encrypt(user.password)
+                },
+                accessToken: {
+                    clientId: clientInfo,
+                    username: user.username,
+                    expiry: newExpirationTime,
+                    token: genToken
+                },
+                createdOn: rightNow,
+                displayName: user.firstName + " " + user.lastName,
+                registrationVerificationToken: null,
+                isValidated: true
+            };
+            deferred.resolve(userResultant);
+        })
+        .fail((err : Error) => { deferred.reject(err); }).done();
+
+        return deferred.promise;
     }
 }

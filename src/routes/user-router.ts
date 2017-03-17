@@ -1,15 +1,20 @@
 'use strict'
+
 import * as express from "express";
 import { Request, Response, Router } from "express";
 import { IUserController } from "../controllers/interface/user";
 import { SessionManager, SessionKeys } from "../util/session";
+import { Logger } from '../util/logger';
 
 let userController: IUserController;
 let router: Router = express.Router();
 
+const log = new Logger('UserRouter');
+
 export class UserRouter {
 
 	constructor(userControllerInstance: IUserController) {
+		log.debug("Intialized User Router ");
 		userController = userControllerInstance;
 		this.init();
 	}
@@ -32,6 +37,7 @@ export class UserRouter {
 		 */
 
 		router.get("/", function (request: Request, response: Response) {
+            log.debug("GET : /");
 			userController.listUser(null, request, response);
 		});
 
@@ -53,6 +59,7 @@ export class UserRouter {
 
 		
 		router.get("/self", function (request: Request, response: Response) {
+            log.debug("GET : /self");
 			userController.self(request, response);
 		});
 
@@ -117,16 +124,19 @@ export class UserRouter {
 		 */
 
 		router.get("/:id", function (request: Request, response: Response) {
+            log.debug("GET : /:id");
 			if (request.params.id !== null || request.params.id !== '') {
 				userController.getUserById(request.params.id, request, response);
 			}
 		});
 		
 		router.put("/:id", function (request: Request, response: Response) {
+            log.debug("PUT : /:id");
 			userController.updateUser(request.params.id, request.body, request, response);
 		});
 
 		router.delete("/:id", function (request: Request, response: Response) {
+            log.debug("DELETE : /:id");
 			userController.removeUser(request.params.id, request, response);
 		});
 	}

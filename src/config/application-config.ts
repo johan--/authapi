@@ -13,6 +13,7 @@ class ApplicationConfig{
     public static IPMGMT_CONFIG = config.IPMGMT;
     public static REDIRECT_CONFIG = config.REDIRECT;
 	public static WHITELISTED_DOMAIN = config.WHITELISTED_DOMAIN;
-    public static LOGGER = config.LOGGER;
+    public static LOG_PATH = '/var/log/tandf/';
+    public static APP_LOG_PATH = '/var/log/tandf/authuserapi-v2/';
 }
 export = ApplicationConfig;
